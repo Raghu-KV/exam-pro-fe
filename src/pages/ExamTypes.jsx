@@ -1,10 +1,10 @@
 import React from "react";
-import PageHeader from "../components/PageHeader";
+import PageHeaderComp from "../components/PageHeaderComp";
 
 function ExamTypes() {
   return (
     <div className="w-full">
-      <PageHeader
+      <PageHeaderComp
         heading={"Exam Types"}
         buttonContent={"Add exam type"}
         route={"/auth/exam-types/add-exam-type"}

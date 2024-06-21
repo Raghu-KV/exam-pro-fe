@@ -1,10 +1,10 @@
 import React from "react";
-import PageHeader from "../components/PageHeader";
+import PageHeaderComp from "../components/PageHeaderComp";
 
 function Settings() {
   return (
     <div className="w-full">
-      <PageHeader heading={"Settings"} />
+      <PageHeaderComp heading={"Settings"} />
       <div className="h-[200vh]"></div>
     </div>
   );

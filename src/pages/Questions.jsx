@@ -1,10 +1,10 @@
 import React from "react";
-import PageHeader from "../components/PageHeader";
+import PageHeaderComp from "../components/PageHeaderComp";
 
 function Questions() {
   return (
     <div className="w-full">
-      <PageHeader
+      <PageHeaderComp
         heading={"Questions"}
         buttonContent={"Add question"}
         route={"/auth/questions/add-question"}

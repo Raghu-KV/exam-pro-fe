@@ -1,10 +1,10 @@
 import React from "react";
-import PageHeader from "../components/PageHeader";
+import PageHeaderComp from "../components/PageHeaderComp";
 
 function TestTypes() {
   return (
     <div className="w-full">
-      <PageHeader
+      <PageHeaderComp
         heading={"Test Types"}
         buttonContent={"Add test type"}
         route={"/auth/test-types/add-test-type"}

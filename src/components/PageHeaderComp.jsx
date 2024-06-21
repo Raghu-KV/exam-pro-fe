@@ -1,7 +1,7 @@
 import React from "react";
 import { MdAdd } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-function PageHeader({ heading, buttonContent, route }) {
+function PageHeaderComp({ heading, buttonContent, route }) {
   const navigate = useNavigate();
 
   return (
@@ -29,4 +29,4 @@ function PageHeader({ heading, buttonContent, route }) {
   );
 }
 
-export default PageHeader;
+export default PageHeaderComp;

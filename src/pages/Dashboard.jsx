@@ -1,10 +1,10 @@
 import React from "react";
-import PageHeader from "../components/PageHeader";
+import PageHeaderComp from "../components/PageHeaderComp";
 
 function Dashboard() {
   return (
     <div className="w-full">
-      <PageHeader heading={"Dashboard"} />
+      <PageHeaderComp heading={"Dashboard"} />
       <div className="h-[200vh]"></div>
     </div>
   );
