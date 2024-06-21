@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import SideBar from "./components/SideBar";
 
 function App() {
   return (
-    <div>
-      <div>hi static</div>
+    <div className="flex">
+      <SideBar />
       <Outlet />
     </div>
   );
