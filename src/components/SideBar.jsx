@@ -60,7 +60,7 @@ function SideBar() {
     <div
       className={`h-screen px-4 py-4 font-inter text-appGray border-r-2 flex flex-col justify-between ${
         navState.value ? ` w-1/6` : `w-20 items-center`
-      } duration-500`}
+      } duration-500 sticky top-0`}
     >
       <div>
         <div
