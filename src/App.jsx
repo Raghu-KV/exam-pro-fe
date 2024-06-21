@@ -3,7 +3,7 @@ import SideBar from "./components/SideBar";
 
 function App() {
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <SideBar />
       <Outlet />
     </div>

@@ -3,7 +3,7 @@ import { MdArrowBackIos } from "react-icons/md";
 
 function ErrorPage() {
   return (
-    <div className="container mx-auto px-5">
+    <div className="px-5 w-full">
       <div className="flex flex-col items-center justify-center min-h-screen font-inter gap-4 text-center">
         <h1 className="font-bold text-3xl text-appDarkBlue">
           404 Request could not be found
