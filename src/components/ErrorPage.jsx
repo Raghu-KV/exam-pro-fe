@@ -11,7 +11,7 @@ function ErrorPage() {
         <p className=" text-appGray">
           Pease check the route your are in or The page does not exist
         </p>
-        <Link to="/dashboard">
+        <Link to="/auth/dashboard">
           <p className=" w-40 py-3 bg-appGreen text-white rounded-xl flex items-center justify-center duration-300 hover:scale-105">
             <MdArrowBackIos />
             Dashboard
