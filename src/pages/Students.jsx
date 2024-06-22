@@ -15,6 +15,8 @@ function Students() {
           allFilter && allFilter
         }`
       );
+    } else {
+      setQueryParams("");
     }
   }, [studentName, allFilter]);
 
