@@ -13,6 +13,8 @@ import ExamTypes from "./pages/ExamTypes";
 import TestTypes from "./pages/TestTypes";
 import Questions from "./pages/Questions";
 import Settings from "./pages/Settings";
+import Subjects from "./pages/Subjects.jsx";
+import Chapters from "./pages/Chapters.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path: "exam-types",
         element: <ExamTypes />,
+      },
+      {
+        path: "subjects",
+        element: <Subjects />,
+      },
+      {
+        path: "chapters",
+        element: <Chapters />,
       },
       {
         path: "test-types",

@@ -43,7 +43,8 @@ function Login() {
                 type="string"
                 id="password"
                 name="password"
-                className="border-appGray border px-2 py-3 rounded-xl w-96 placeholder-slate-400  focus:outline-none  focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                className="border-appGray border px-2 py-3 rounded-xl w-96 placeholder-slate-400  
+                focus:outline-none  focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                 placeholder="Password"
               />
               <ErrorMessage name="password">

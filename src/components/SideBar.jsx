@@ -8,6 +8,9 @@ import {
   MdQuestionMark,
   MdSettings,
   MdLogout,
+  MdMenuBook,
+  MdOutlineArticle,
+  MdNotifications,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -31,6 +34,16 @@ const navMenu = [
     link: "/auth/exam-types",
   },
   {
+    title: "Subjects",
+    icon: <MdMenuBook size={25} />,
+    link: "/auth/subjects",
+  },
+  {
+    title: "Chapters",
+    icon: <MdOutlineArticle size={25} />,
+    link: "/auth/chapters",
+  },
+  {
     title: "Test Types",
     icon: <MdOutlineLan size={25} />,
     link: "/auth/test-types",
@@ -39,6 +52,11 @@ const navMenu = [
     title: "Questions",
     icon: <MdQuestionMark size={25} />,
     link: "/auth/questions",
+  },
+  {
+    title: "Announcements",
+    icon: <MdNotifications size={25} />,
+    link: "/auth/Announcements",
   },
   {
     title: "Settings",

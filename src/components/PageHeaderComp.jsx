@@ -5,7 +5,7 @@ function PageHeaderComp({ heading, buttonContent, route }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-appLightGray/30 rounded-2xl m-2 sticky top-2">
+    <div className="bg-slate-200 rounded-2xl m-2 sticky top-2 z-40">
       <div className="py-3 px-8 flex items-center justify-between font-inter ">
         <div>
           <h1 className=" font-bold text-3xl text-appDarkBlue py-2">
