@@ -6,15 +6,19 @@ import { useState, useEffect } from "react";
 function Students() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
+  const [queryParams, setQueryParams] = useState("");
 
-  let queryParams = ``;
-  if (studentName || allFilter) {
-    queryParams = `?query-params=true${studentName && studentName}${
-      allFilter && allFilter
-    }`;
-  } else {
-    queryParams = null;
-  }
+  useEffect(() => {
+    if (studentName || allFilter) {
+      setQueryParams(
+        `?query-params=true${studentName && studentName}${
+          allFilter && allFilter
+        }`
+      );
+    }
+  }, [studentName, allFilter]);
+
+  console.log(queryParams, "PARAMS");
 
   // filterExamType,
   // filterDate,
@@ -31,7 +35,9 @@ function Students() {
         route={"/auth/student/add-student"}
       />
       <FilterCompo
+        searchItem={studentName}
         setSearchItem={setStudentName}
+        allFilter={allFilter}
         setAllFilter={setAllFilter}
         isFilter={true}
         filterExamType={true}

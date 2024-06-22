@@ -3,8 +3,10 @@ import { MdSearch, MdFilterAlt, MdClose } from "react-icons/md";
 import { useState, useEffect } from "react";
 
 function FilterCompo({
-  //   setSearchItem,
-  //   setAllFilter,
+  searchItem,
+  setSearchItem,
+  allFilter,
+  setAllFilter,
   isFilter,
   filterExamType,
   filterDate,
@@ -24,13 +26,8 @@ function FilterCompo({
   const [rollNo, setRollNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
-  const [allFilter, setAllFilter] = useState("");
-  const [searchItem, setSearchItem] = useState("");
-
-  useEffect(() => {
-    console.log(search);
-    console.log(allFilter);
-  }, [searchItem, allFilter]);
+  //   const [allFilter, setAllFilter] = useState("");
+  //   const [searchItem, setSearchItem] = useState("");
 
   const handleClearFilter = () => {
     setExamType("");
