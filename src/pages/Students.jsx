@@ -1,7 +1,7 @@
 import React from "react";
 import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Students() {
   const [studentName, setStudentName] = useState("");
@@ -22,8 +22,6 @@ function Students() {
   // filterChapter,
   // filterRollNumber,
   // filterPhoneNumber,
-
-  console.log(queryParams);
 
   return (
     <div className="w-full">

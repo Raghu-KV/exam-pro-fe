@@ -1,10 +1,10 @@
 import React from "react";
 import { MdSearch, MdFilterAlt, MdClose } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function FilterCompo({
-  setSearchItem,
-  setAllFilter,
+  //   setSearchItem,
+  //   setAllFilter,
   isFilter,
   filterExamType,
   filterDate,
@@ -23,6 +23,14 @@ function FilterCompo({
   const [chapter, setChapter] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
+
+  const [allFilter, setAllFilter] = useState("");
+  const [searchItem, setSearchItem] = useState("");
+
+  useEffect(() => {
+    console.log(search);
+    console.log(allFilter);
+  }, [searchItem, allFilter]);
 
   const handleClearFilter = () => {
     setExamType("");
@@ -56,6 +64,13 @@ function FilterCompo({
     } else {
       setAllFilter("");
     }
+
+    if (search) {
+      const searchQuery = `&search=${search}`;
+      setSearchItem(searchQuery);
+    } else {
+      setSearchItem("");
+    }
   };
 
   const handleSearch = () => {
@@ -64,6 +79,28 @@ function FilterCompo({
       setSearchItem(searchQuery);
     } else {
       setSearchItem("");
+    }
+
+    if (
+      examType ||
+      startDate ||
+      endDate ||
+      subject ||
+      chapter ||
+      rollNo ||
+      phoneNo
+    ) {
+      const filterQuery = `&filter=true${examType && `&exam-type=${examType}`}${
+        subject && `&subject=${subject}`
+      }${chapter && `&chapter=${chapter}`}${rollNo && `&roll-no=${rollNo}`}${
+        phoneNo && `&phone-no=${phoneNo}`
+      }${startDate && `&start-date=${startDate}`}${
+        endDate && `&end-date=${endDate}`
+      }`;
+
+      setAllFilter(filterQuery);
+    } else {
+      setAllFilter("");
     }
   };
 
