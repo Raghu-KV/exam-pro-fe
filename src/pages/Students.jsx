@@ -20,14 +20,7 @@ function Students() {
     }
   }, [studentName, allFilter]);
 
-  console.log(queryParams, "PARAMS");
-
-  // filterExamType,
-  // filterDate,
-  // filterSubject,
-  // filterChapter,
-  // filterRollNumber,
-  // filterPhoneNumber,
+  console.log(encodeURI(queryParams), "SUBJECT PARAMS");
 
   return (
     <div className="w-full">
@@ -37,9 +30,7 @@ function Students() {
         route={"/auth/student/add-student"}
       />
       <FilterCompo
-        searchItem={studentName}
         setSearchItem={setStudentName}
-        allFilter={allFilter}
         setAllFilter={setAllFilter}
         isFilter={true}
         filterExamType={true}

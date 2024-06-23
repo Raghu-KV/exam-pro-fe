@@ -194,7 +194,7 @@ function FilterCompo({
                       value={startDate}
                       id="start-date"
                       className="mt-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 
-                focus:ring-appGreen px-2"
+                focus:ring-appGreen px-2 placeholder-slate-400"
                       onChange={(event) => setStartDate(event.target.value)}
                     />
                   </div>
@@ -210,7 +210,7 @@ function FilterCompo({
                       value={endDate}
                       id="end-date"
                       className="mt-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 
-                focus:ring-appGreen px-2"
+                focus:ring-appGreen px-2 placeholder-slate-400"
                       onChange={(event) => setEndDate(event.target.value)}
                     />
                   </div>
@@ -230,7 +230,7 @@ function FilterCompo({
                     name="subject"
                     id="subject"
                     className="mt-1 px-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 
-            focus:ring-appGreen"
+            focus:ring-appGreen placeholder-slate-400"
                     value={subject}
                     onChange={(event) => setSubjet(event.target.value)}
                   >
@@ -257,7 +257,7 @@ function FilterCompo({
                     name="chapter"
                     id="chapter"
                     className="mt-1 px-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 
-            focus:ring-appGreen"
+            focus:ring-appGreen placeholder-slate-400  "
                     value={chapter}
                     onChange={(event) => setChapter(event.target.value)}
                   >
