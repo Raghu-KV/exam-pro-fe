@@ -2,6 +2,8 @@ import React from "react";
 import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
+import TableCompo from "../components/TableCompo";
+
 function ExamTypes() {
   const [examType, setExamType] = useState("");
   const [allFilter, setAllFilter] = useState("");
@@ -18,6 +20,19 @@ function ExamTypes() {
   }, [examType, allFilter]);
 
   console.log(encodeURI(queryParams), "EXAM TYPES PARAMS");
+
+  const tableTitle = [
+    { title: "Exam Type", keyName: "examType" },
+    { title: "Created at", keyName: "createdAt" },
+  ];
+
+  const mockStudentData = [
+    {
+      _id: "ugiuguiwqgdqiuwgqwiudg",
+      examType: "NEET",
+      createdAt: "10-10-24",
+    },
+  ];
 
   return (
     <div className="w-full">
@@ -37,6 +52,8 @@ function ExamTypes() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
+
+      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
       <div className="h-[200vh]"></div>
     </div>
   );

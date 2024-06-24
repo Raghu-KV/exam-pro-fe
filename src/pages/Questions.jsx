@@ -1,6 +1,7 @@
 import React from "react";
 import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
+import TableCompo from "../components/TableCompo";
 import { useState, useEffect } from "react";
 
 function Questions() {
@@ -17,6 +18,38 @@ function Questions() {
       setQueryParams("");
     }
   }, [question, allFilter]);
+
+  const tableTitle = [
+    { title: "Question", keyName: "question" },
+    { title: "Options", keyName: "options" },
+    { title: "Answer", keyName: "answer" },
+    { title: "Chapter", keyName: "chapter" },
+    { title: "Subject", keyName: "subject" },
+    { title: "Exam type", keyName: "examType" },
+    { title: "Created at", keyName: "createdAt" },
+  ];
+
+  const mockStudentData = [
+    {
+      _id: "ugiuguiwqgdqiuwgqwiudg",
+      question:
+        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta consectetur recusandae odio quam nam blanditiis maxime molestiae omnis eveniet laboriosam distinctio nostrum aut est, dolor provident reiciendis magnam veritatis porro?",
+      options: [
+        "Algebra",
+        " | ",
+        "Trignomentory",
+        " | ",
+        "Algebsdfsdfsdfsdra",
+        " | ",
+        "Trignomsdfsdfentory",
+      ],
+      answer: "Algebra",
+      chapter: "Algebra",
+      subject: "Maths",
+      examType: "NEET",
+      createdAt: "10-02-24",
+    },
+  ];
 
   console.log(encodeURI(queryParams), "QUESTION PARAMS");
   return (
@@ -38,6 +71,7 @@ function Questions() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
+      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
       <div className="h-[200vh]"></div>
     </div>
   );
