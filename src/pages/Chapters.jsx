@@ -8,6 +8,8 @@ function Chapters() {
   const [chapterName, setChapterName] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
     if (chapterName || allFilter) {
@@ -20,6 +22,10 @@ function Chapters() {
       setQueryParams("");
     }
   }, [chapterName, allFilter]);
+
+  useEffect(() => {
+    setPaginationParams(`?page=${currentPage}`);
+  }, [currentPage]);
 
   console.log(encodeURI(queryParams), "Chapter PARAMS");
 
@@ -40,6 +46,13 @@ function Chapters() {
     },
   ];
 
+  const paginateOptions = {
+    currentPage: 10,
+    totalPage: 12,
+    hasNextPage: true,
+    hasPrevPage: true,
+  };
+
   return (
     <div className="w-full">
       <PageHeaderComp
@@ -58,7 +71,12 @@ function Chapters() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
-      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
+      <TableCompo
+        tableTitle={tableTitle}
+        tableData={mockStudentData}
+        paginateOptions={paginateOptions}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="h-[200vh]"></div>
     </div>
   );

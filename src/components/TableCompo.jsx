@@ -8,8 +8,17 @@ import {
   MdArrowForwardIos,
 } from "react-icons/md";
 
-function TableCompo({ tableTitle, tableData }) {
+function TableCompo({
+  tableTitle,
+  tableData,
+  paginateOptions,
+  setCurrentPage,
+}) {
   const navigate = useNavigate();
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="m-2">
@@ -41,6 +50,7 @@ function TableCompo({ tableTitle, tableData }) {
               className={`table-row hover:bg-slate-200 duration-200 ${
                 index % 2 != 0 && `bg-appDarkBlue/10`
               }`}
+              key={index}
             >
               <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
                 {index + 1}
@@ -79,28 +89,64 @@ function TableCompo({ tableTitle, tableData }) {
       <div className="flex justify-between items-center mt-2">
         <div>
           <p className="text-sm">
-            Showing <span className="font-semibold text-base">1</span> of{" "}
-            <span className="font-semibold text-base">10</span> pages
+            Showing{" "}
+            <span className="font-semibold text-base">
+              {paginateOptions.currentPage}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-base">
+              {paginateOptions.totalPage}
+            </span>{" "}
+            pages
           </p>
         </div>
         <div className="flex justify-center items-center gap-2 text-sm">
-          <div className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer">
-            <MdArrowBackIos size={15} />
-            <p>Prev</p>
-          </div>
-          <div className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer">
-            <p>1</p>
-          </div>
-          <div className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer">
-            <p>2</p>
-          </div>
-          <div className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer">
-            <p>3</p>
-          </div>
-          <div className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer">
-            <p>Next</p>
-            <MdArrowForwardIos size={15} />
-          </div>
+          {paginateOptions.hasPrevPage && (
+            <div
+              className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
+              onClick={() => setCurrentPage((prv) => prv - 1)}
+            >
+              <MdArrowBackIos size={15} />
+              <p>Prev</p>
+            </div>
+          )}
+
+          {paginateOptions.totalPage > 3 && (
+            <>
+              <div
+                className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
+                onClick={() => handlePageChange(paginateOptions.currentPage)}
+              >
+                <p>{paginateOptions.currentPage}</p>
+              </div>
+              <div
+                className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
+                onClick={() =>
+                  handlePageChange(paginateOptions.currentPage + 1)
+                }
+              >
+                <p>{paginateOptions.currentPage + 1}</p>
+              </div>
+              <div
+                className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
+                onClick={() =>
+                  handlePageChange(paginateOptions.currentPage + 2)
+                }
+              >
+                <p>{paginateOptions.currentPage + 2}</p>
+              </div>
+            </>
+          )}
+
+          {paginateOptions.hasNextPage && (
+            <div
+              className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
+              onClick={() => setCurrentPage((prv) => prv + 1)}
+            >
+              <p>Next</p>
+              <MdArrowForwardIos size={15} />
+            </div>
+          )}
         </div>
       </div>
     </div>

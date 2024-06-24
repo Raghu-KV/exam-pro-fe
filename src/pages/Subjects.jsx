@@ -8,6 +8,8 @@ function Subjects() {
   const [subjectName, setSubjectName] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
     if (subjectName || allFilter) {
@@ -20,6 +22,10 @@ function Subjects() {
       setQueryParams("");
     }
   }, [subjectName, allFilter]);
+
+  useEffect(() => {
+    setPaginationParams(`?page=${currentPage}`);
+  }, [currentPage]);
 
   console.log(encodeURI(queryParams), "SUBJECT PARAMS");
 
@@ -37,6 +43,13 @@ function Subjects() {
       createdAt: "10-10-24",
     },
   ];
+
+  const paginateOptions = {
+    currentPage: 10,
+    totalPage: 12,
+    hasNextPage: true,
+    hasPrevPage: true,
+  };
 
   return (
     <div className="w-full">
@@ -57,7 +70,12 @@ function Subjects() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
-      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
+      <TableCompo
+        tableTitle={tableTitle}
+        tableData={mockStudentData}
+        paginateOptions={paginateOptions}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="h-[200vh]"></div>
     </div>
   );

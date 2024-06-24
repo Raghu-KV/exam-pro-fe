@@ -8,6 +8,8 @@ function TestTypes() {
   const [testType, setTestType] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
     if (testType || allFilter) {
@@ -18,6 +20,10 @@ function TestTypes() {
       setQueryParams("");
     }
   }, [testType, allFilter]);
+
+  useEffect(() => {
+    setPaginationParams(`?page=${currentPage}`);
+  }, [currentPage]);
 
   const tableTitle = [
     { title: "Test Name", keyName: "testType" },
@@ -42,6 +48,13 @@ function TestTypes() {
     },
   ];
 
+  const paginateOptions = {
+    currentPage: 10,
+    totalPage: 12,
+    hasNextPage: true,
+    hasPrevPage: true,
+  };
+
   console.log(encodeURI(queryParams), "TEST PARAMS");
   return (
     <div className="w-full">
@@ -62,7 +75,12 @@ function TestTypes() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
-      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
+      <TableCompo
+        tableTitle={tableTitle}
+        tableData={mockStudentData}
+        paginateOptions={paginateOptions}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="h-[200vh]"></div>
     </div>
   );

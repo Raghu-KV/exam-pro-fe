@@ -8,6 +8,8 @@ function Questions() {
   const [question, setQuestion] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
     if (question || allFilter) {
@@ -18,6 +20,10 @@ function Questions() {
       setQueryParams("");
     }
   }, [question, allFilter]);
+
+  useEffect(() => {
+    setPaginationParams(`?page=${currentPage}`);
+  }, [currentPage]);
 
   const tableTitle = [
     { title: "Question", keyName: "question" },
@@ -51,6 +57,13 @@ function Questions() {
     },
   ];
 
+  const paginateOptions = {
+    currentPage: 10,
+    totalPage: 12,
+    hasNextPage: true,
+    hasPrevPage: true,
+  };
+
   console.log(encodeURI(queryParams), "QUESTION PARAMS");
   return (
     <div className="w-full">
@@ -71,7 +84,12 @@ function Questions() {
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />
-      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
+      <TableCompo
+        tableTitle={tableTitle}
+        tableData={mockStudentData}
+        paginateOptions={paginateOptions}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="h-[200vh]"></div>
     </div>
   );

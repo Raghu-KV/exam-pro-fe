@@ -3,11 +3,14 @@ import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
+// import { current } from "@reduxjs/toolkit";
 
 function Students() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
     if (studentName || allFilter) {
@@ -21,7 +24,11 @@ function Students() {
     }
   }, [studentName, allFilter]);
 
-  console.log(encodeURI(queryParams), "SUBJECT PARAMS");
+  useEffect(() => {
+    setPaginationParams(`?page=${currentPage}`);
+  }, [currentPage]);
+
+  console.log(encodeURI(queryParams), "SUBJECT PARAMS", currentPage);
 
   const tableTitle = [
     { title: "Roll No.", keyName: "rollNo" },
@@ -42,6 +49,13 @@ function Students() {
     },
   ];
 
+  const paginateOptions = {
+    currentPage: 10,
+    totalPage: 12,
+    hasNextPage: true,
+    hasPrevPage: true,
+  };
+
   return (
     <div className="w-full">
       <PageHeaderComp
@@ -60,7 +74,12 @@ function Students() {
         filterPhoneNumber={true}
         filterRollNumber={true}
       />
-      <TableCompo tableTitle={tableTitle} tableData={mockStudentData} />
+      <TableCompo
+        tableTitle={tableTitle}
+        tableData={mockStudentData}
+        paginateOptions={paginateOptions}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="h-[200vh]">dddd</div>
     </div>
   );
