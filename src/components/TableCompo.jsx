@@ -13,6 +13,9 @@ function TableCompo({
   tableData,
   paginateOptions,
   setCurrentPage,
+  editRoute,
+  viewRoute,
+  handleDeleteItem,
 }) {
   const navigate = useNavigate();
 
@@ -57,7 +60,10 @@ function TableCompo({
               </td>
 
               {tableTitle.map((itemData, i) => (
-                <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
+                <td
+                  className="table-cell px-3 py-1 border-b border-appDarkBlue border-r"
+                  key={i}
+                >
                   {item[itemData.keyName]}
                 </td>
               ))}
@@ -66,17 +72,20 @@ function TableCompo({
                 <div className="flex items-center justify-center">
                   <p
                     className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
-                    onClick={() => navigate(`/auth/students/view/${item._id}`)}
+                    onClick={() => navigate(`view/${item._id}`)}
                   >
                     <MdInfo size={25} />
                   </p>
                   <p
                     className="cursor-pointer text-appDarkBlue px-1 py-1 hover:bg-appDarkBlue/20 duration-150 rounded-xl"
-                    onClick={() => navigate(`/auth/students/edit/${item._id}`)}
+                    onClick={() => navigate(`edit/${item._id}`)}
                   >
                     <MdCreate size={25} />
                   </p>
-                  <p className="cursor-pointer text-red-500 px-1 py-1 hover:bg-red-500/20 duration-150 rounded-xl">
+                  <p
+                    className="cursor-pointer text-red-500 px-1 py-1 hover:bg-red-500/20 duration-150 rounded-xl"
+                    onClick={() => handleDeleteItem(item._id)}
+                  >
                     <MdDelete size={25} />
                   </p>
                 </div>

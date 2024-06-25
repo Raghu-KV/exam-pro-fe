@@ -3,6 +3,7 @@ import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
 import TableCompo from "../components/TableCompo";
 import { useState, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 function Questions() {
   const [question, setQuestion] = useState("");
@@ -64,9 +65,20 @@ function Questions() {
     hasPrevPage: true,
   };
 
+  const handleDeleteItem = (id) => {
+    const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
+    if (permission && permission.toLowerCase() == "y") {
+      toast.success(`DELETE API CALL ${id}`);
+      return;
+    }
+
+    toast.error("Faild to delete.");
+  };
+
   console.log(encodeURI(queryParams), "QUESTION PARAMS");
   return (
     <div className="w-full">
+      <Toaster />
       <PageHeaderComp
         heading={"Questions"}
         buttonContent={"Add question"}
@@ -89,6 +101,7 @@ function Questions() {
         tableData={mockStudentData}
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
+        handleDeleteItem={handleDeleteItem}
       />
       <div className="h-[200vh]"></div>
     </div>

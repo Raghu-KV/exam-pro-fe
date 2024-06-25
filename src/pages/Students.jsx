@@ -3,8 +3,7 @@ import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
-// import { current } from "@reduxjs/toolkit";
-
+import toast, { Toaster } from "react-hot-toast";
 function Students() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
@@ -56,12 +55,23 @@ function Students() {
     hasPrevPage: true,
   };
 
+  const handleDeleteItem = (id) => {
+    const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
+    if (permission && permission.toLowerCase() == "y") {
+      toast.success(`DELETE API CALL ${id}`);
+      return;
+    }
+
+    toast.error("Faild to delete.");
+  };
+
   return (
     <div className="w-full">
+      <Toaster />
       <PageHeaderComp
         heading={"Students"}
         buttonContent={"Add student"}
-        route={"/auth/student/add-student"}
+        route={"/auth/students/add-student"}
       />
       <FilterCompo
         setSearchItem={setStudentName}
@@ -79,6 +89,7 @@ function Students() {
         tableData={mockStudentData}
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
+        handleDeleteItem={handleDeleteItem}
       />
       <div className="h-[200vh]">dddd</div>
     </div>
