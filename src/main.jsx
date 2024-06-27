@@ -23,6 +23,7 @@ import AddSubject from "./pages/AddSubject.jsx";
 import EditSubject from "./pages/EditSubject.jsx";
 import AddChapter from "./pages/AddChapter.jsx";
 import EditChapter from "./pages/EditChapter.jsx";
+import AddQuestion from "./pages/AddQuestion.jsx";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: "questions",
         element: <Questions />,
+      },
+      {
+        path: "questions/add-question",
+        element: <AddQuestion />,
       },
       {
         path: "settings",
