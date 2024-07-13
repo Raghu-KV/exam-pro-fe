@@ -24,6 +24,7 @@ import EditSubject from "./pages/EditSubject.jsx";
 import AddChapter from "./pages/AddChapter.jsx";
 import EditChapter from "./pages/EditChapter.jsx";
 import AddQuestion from "./pages/AddQuestion.jsx";
+import EditQuestion from "./pages/EditQuestion.jsx";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <h1>Login</h1>,
+        element: <ErrorPage />,
       },
       {
         path: "dashboard",
@@ -108,6 +109,12 @@ const router = createBrowserRouter([
         path: "questions/add-question",
         element: <AddQuestion />,
       },
+
+      {
+        path: "questions/edit/:id",
+        element: <EditQuestion />,
+      },
+
       {
         path: "settings",
         element: <Settings />,

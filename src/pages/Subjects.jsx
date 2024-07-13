@@ -32,7 +32,7 @@ function Subjects() {
 
   const tableTitle = [
     { title: "Subject Name", keyName: "subjectName" },
-    { title: "Exam exam", keyName: "examType" },
+    { title: "Exam Type", keyName: "examType" },
     { title: "Created at", keyName: "createdAt" },
   ];
 
