@@ -4,6 +4,7 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
+import { useLazyGetExamTypeQuery } from "../redux/requests/examTypeRequest";
 
 function ExamTypes() {
   const [examType, setExamType] = useState("");
@@ -15,7 +16,7 @@ function ExamTypes() {
   useEffect(() => {
     if (examType || allFilter) {
       setQueryParams(
-        `?query-params=true${examType && examType}${allFilter && allFilter}`
+        `&query-params=true${examType && examType}${allFilter && allFilter}`
       );
     } else {
       setQueryParams("");
@@ -26,27 +27,20 @@ function ExamTypes() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
-  console.log(encodeURI(queryParams), "EXAM TYPES PARAMS");
+  // API CALL
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetExamTypeQuery();
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger(`${paginationParams}${queryParams}`).unwrap();
+    };
+    fetch();
+  }, [queryParams, paginationParams]);
 
   const tableTitle = [
     { title: "Exam Type", keyName: "examType" },
-    { title: "Created at", keyName: "createdAt" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
-
-  const mockStudentData = [
-    {
-      _id: "ugiuguiwqgdqiuwgqwiudg",
-      examType: "NEET",
-      createdAt: "10-10-24",
-    },
-  ];
-
-  const paginateOptions = {
-    currentPage: 10,
-    totalPage: 12,
-    hasNextPage: true,
-    hasPrevPage: true,
-  };
 
   const handleDeleteItem = (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
@@ -69,6 +63,7 @@ function ExamTypes() {
       <FilterCompo
         setSearchItem={setExamType}
         setAllFilter={setAllFilter}
+        setCurrentPage={setCurrentPage}
         isFilter={false}
         // filterExamType={true}
         // filterDate={true}
@@ -80,12 +75,13 @@ function ExamTypes() {
 
       <TableCompo
         tableTitle={tableTitle}
-        tableData={mockStudentData}
-        paginateOptions={paginateOptions}
+        tableData={data?.docs}
+        isLoading={isLoading}
+        isError={isError}
+        paginateOptions={data?.paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
       />
-      <div className="h-[200vh]"></div>
     </div>
   );
 }

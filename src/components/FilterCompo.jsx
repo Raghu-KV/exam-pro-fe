@@ -14,6 +14,7 @@ function FilterCompo({
   filterChapter,
   filterRollNumber,
   filterPhoneNumber,
+  setCurrentPage,
 }) {
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -40,6 +41,7 @@ function FilterCompo({
   };
 
   const handleApplyFilter = () => {
+    setCurrentPage(1);
     if (
       examType ||
       startDate ||
@@ -71,6 +73,7 @@ function FilterCompo({
   };
 
   const handleSearch = () => {
+    setCurrentPage(1);
     if (search) {
       const searchQuery = `&search=${search}`;
       setSearchItem(searchQuery);

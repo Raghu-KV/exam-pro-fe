@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   MdInfo,
   MdCreate,
@@ -7,6 +7,8 @@ import {
   MdArrowBackIos,
   MdArrowForwardIos,
 } from "react-icons/md";
+
+import moment from "moment";
 
 function TableCompo({
   tableTitle,
@@ -16,12 +18,29 @@ function TableCompo({
   editRoute,
   viewRoute,
   handleDeleteItem,
+  isLoading,
+  isError,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentLoaction = location.pathname.split("/")[2];
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  if (tableData?.length == 0) {
+    return <h1 className="text-center">No data found</h1>;
+  }
+
+  if (isLoading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
+
+  if (isError) {
+    return <h1 className="text-center">Error! Something went wrong</h1>;
+  }
 
   return (
     <div className="m-2">
@@ -48,7 +67,7 @@ function TableCompo({
         </thead>
 
         <tbody className="table-row-group border-b border-r border-appDarkBlue text-sm">
-          {tableData.map((item, index) => (
+          {tableData?.map((item, index) => (
             <tr
               className={`table-row hover:bg-slate-200 duration-200 ${
                 index % 2 != 0 && `bg-appDarkBlue/10`
@@ -64,18 +83,24 @@ function TableCompo({
                   className="table-cell px-3 py-1 border-b border-appDarkBlue border-r"
                   key={i}
                 >
-                  {item[itemData.keyName]}
+                  {itemData.isDate
+                    ? moment(item[itemData.keyName]).format("D/M/YYYY")
+                    : item[itemData.keyName]}
                 </td>
               ))}
 
+              {/* TABLE ACTIONS */}
               <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
                 <div className="flex items-center justify-center">
-                  <p
-                    className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
-                    onClick={() => navigate(`view/${item._id}`)}
-                  >
-                    <MdInfo size={25} />
-                  </p>
+                  {!["exam-types"].includes(currentLoaction) && (
+                    <p
+                      className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
+                      onClick={() => navigate(`view/${item._id}`)}
+                    >
+                      <MdInfo size={25} />
+                    </p>
+                  )}
+
                   <p
                     className="cursor-pointer text-appDarkBlue px-1 py-1 hover:bg-appDarkBlue/20 duration-150 rounded-xl"
                     onClick={() => navigate(`edit/${item._id}`)}
@@ -95,22 +120,22 @@ function TableCompo({
         </tbody>
       </table>
       {/* PAGINATION OPTIONS */}
-      <div className="flex justify-between items-center mt-2">
+      <div className="flex justify-between items-center mt-2 px-5">
         <div>
           <p className="text-sm">
             Showing{" "}
             <span className="font-semibold text-base">
-              {paginateOptions.currentPage}
+              {paginateOptions?.currentPage}
             </span>{" "}
             of{" "}
             <span className="font-semibold text-base">
-              {paginateOptions.totalPage}
+              {paginateOptions?.totalPage}
             </span>{" "}
             pages
           </p>
         </div>
         <div className="flex justify-center items-center gap-2 text-sm">
-          {paginateOptions.hasPrevPage && (
+          {paginateOptions?.hasPrevPage && (
             <div
               className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
               onClick={() => setCurrentPage((prv) => prv - 1)}
@@ -120,14 +145,26 @@ function TableCompo({
             </div>
           )}
 
-          {paginateOptions.totalPage > 3 && (
-            <>
+          <>
+            {paginateOptions?.hasPrevPage && (
               <div
                 className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
-                onClick={() => handlePageChange(paginateOptions.currentPage)}
+                onClick={() =>
+                  handlePageChange(paginateOptions.currentPage - 1)
+                }
               >
-                <p>{paginateOptions.currentPage}</p>
+                <p>{paginateOptions.currentPage - 1}</p>
               </div>
+            )}
+
+            <div
+              className="flex items-center p-1 border bg-appDarkBlue cursor-pointer text-white"
+              onClick={() => handlePageChange(paginateOptions?.currentPage)}
+            >
+              <p>{paginateOptions?.currentPage}</p>
+            </div>
+
+            {paginateOptions?.hasNextPage && (
               <div
                 className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
                 onClick={() =>
@@ -136,18 +173,10 @@ function TableCompo({
               >
                 <p>{paginateOptions.currentPage + 1}</p>
               </div>
-              <div
-                className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
-                onClick={() =>
-                  handlePageChange(paginateOptions.currentPage + 2)
-                }
-              >
-                <p>{paginateOptions.currentPage + 2}</p>
-              </div>
-            </>
-          )}
+            )}
+          </>
 
-          {paginateOptions.hasNextPage && (
+          {paginateOptions?.hasNextPage && (
             <div
               className="flex items-center p-1 border border-appDarkBlue hover:bg-appDarkBlue/10 cursor-pointer"
               onClick={() => setCurrentPage((prv) => prv + 1)}

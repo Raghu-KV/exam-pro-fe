@@ -1,18 +1,34 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useRef } from "react";
 import * as yup from "yup";
+import {
+  useAddExamTypeMutation,
+  useUpdateExamTypeMutation,
+} from "../redux/requests/examTypeRequest";
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-function ExamTypeForm() {
+function ExamTypeForm({ data, isLoading, isFetching }) {
   const formikRef = useRef();
+  const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     formikRef?.current.setFieldValue("rollNo", "45");
-  //   }, [formikRef]);
+  const [addExamType, { isLoading: testLa, isError, data: nit }] =
+    useAddExamTypeMutation();
+  const [updateExamType, updateExamTypeResult] = useUpdateExamTypeMutation();
 
-  //   console.log(formikRef.current);
+  useEffect(() => {
+    if (data) {
+      formikRef?.current?.setFieldValue("examType", data?.examType);
+    }
+  }, [formikRef, isLoading, isFetching, data]);
+
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-[80vh] m-2">
+      <Toaster />
       <Formik
         innerRef={formikRef}
         initialValues={{
@@ -21,8 +37,28 @@ function ExamTypeForm() {
         validationSchema={yup.object({
           examType: yup.string().required("Exam Type is required"),
         })}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          // if it has data then it is edit or add
+
+          if (data) {
+            const editData = { id: data._id, values: values };
+            await updateExamType(editData).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Updated exam type");
+              }
+            });
+          } else {
+            const addData = { values: values };
+            await addExamType(addData.values).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Added exam type");
+              }
+            });
+          }
         }}
       >
         <Form className="flex flex-col gap-3 w-2/3">
