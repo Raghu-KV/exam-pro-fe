@@ -4,7 +4,10 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
-import { useLazyGetExamTypeQuery } from "../redux/requests/examTypeRequest";
+import {
+  useLazyGetExamTypeQuery,
+  useDeleteExamTypeMutation,
+} from "../redux/requests/examTypeRequest";
 
 function ExamTypes() {
   const [examType, setExamType] = useState("");
@@ -37,19 +40,26 @@ function ExamTypes() {
     fetch();
   }, [queryParams, paginationParams]);
 
+  const [deleteExamType] = useDeleteExamTypeMutation();
+
   const tableTitle = [
     { title: "Exam Type", keyName: "examType" },
     { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
-  const handleDeleteItem = (id) => {
+  const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      toast.success(`DELETE API CALL ${id}`);
+      await deleteExamType(id).then((res) => {
+        if (res.error) {
+          toast.error(`Error`);
+        } else {
+          toast.success("Successfully deleted examtype");
+        }
+      });
+
       return;
     }
-
-    toast.error("Faild to delete.");
   };
 
   return (

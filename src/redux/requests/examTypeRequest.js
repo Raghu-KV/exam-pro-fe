@@ -32,6 +32,14 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["exam-type", "exam-type-single"],
     }),
+
+    deleteExamType: builder.mutation({
+      query: (id) => ({
+        url: `/exam-type/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["exam-type"],
+    }),
   }),
 });
 
@@ -40,4 +48,5 @@ export const {
   useGetExamTypeByIdQuery,
   useUpdateExamTypeMutation,
   useAddExamTypeMutation,
+  useDeleteExamTypeMutation,
 } = extendedApiSlice;
