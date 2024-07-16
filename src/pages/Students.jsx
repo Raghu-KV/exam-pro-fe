@@ -83,6 +83,7 @@ function Students() {
         // filterChapter={true}
         filterPhoneNumber={true}
         filterRollNumber={true}
+        setCurrentPage={setCurrentPage}
       />
       <TableCompo
         tableTitle={tableTitle}

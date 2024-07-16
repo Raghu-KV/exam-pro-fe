@@ -47,6 +47,7 @@ function ExamTypeForm({ data, isLoading, isFetching }) {
                 toast.error("Error");
               } else {
                 toast.success("Updated exam type");
+                // navigate("/auth/exam-types");
               }
             });
           } else {

@@ -33,6 +33,7 @@ function ExamTypes() {
   // API CALL
   const [trigger, { isLoading, isError, data, error }] =
     useLazyGetExamTypeQuery();
+
   useEffect(() => {
     const fetch = async () => {
       await trigger(`${paginationParams}${queryParams}`).unwrap();

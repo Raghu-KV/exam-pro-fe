@@ -51,12 +51,12 @@ function FilterCompo({
       rollNo ||
       phoneNo
     ) {
-      const filterQuery = `&filter=true${examType && `&exam-type=${examType}`}${
+      const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
         subject && `&subject=${subject}`
-      }${chapter && `&chapter=${chapter}`}${rollNo && `&roll-no=${rollNo}`}${
-        phoneNo && `&phone-no=${phoneNo}`
-      }${startDate && `&start-date=${startDate}`}${
-        endDate && `&end-date=${endDate}`
+      }${chapter && `&chapter=${chapter}`}${rollNo && `&roll_no=${rollNo}`}${
+        phoneNo && `&phone_no=${phoneNo}`
+      }${startDate && `&start_date=${startDate}`}${
+        endDate && `&end_date=${endDate}`
       }`;
 
       setAllFilter(filterQuery);
