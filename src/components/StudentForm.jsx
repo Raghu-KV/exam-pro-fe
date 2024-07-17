@@ -3,7 +3,13 @@ import { useEffect, useRef } from "react";
 import * as yup from "yup";
 import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
 
-function StudentForm() {
+import {
+  useAddStudentMutation,
+  useEditStudentMutation,
+} from "../redux/requests/studentRequest";
+import toast, { Toaster } from "react-hot-toast";
+
+function StudentForm({ data, isLoading, isFetching }) {
   const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
 
   useEffect(() => {
@@ -19,18 +25,31 @@ function StudentForm() {
 
   const formikRef = useRef();
 
-  // useEffect(() => {
-  //   formikRef?.current.setFieldValue("rollNo", "4ssss5");
-  // }, [formikRef]);
+  const [addStudent, { isLoading: addStudentLoading }] =
+    useAddStudentMutation();
+
+  const [editStudent, { isLoading: editStudentLoading }] =
+    useEditStudentMutation();
+
+  useEffect(() => {
+    formikRef?.current?.setFieldValue("studentName", data?.studentName);
+    formikRef?.current?.setFieldValue("rollNo", data?.rollNo);
+    formikRef?.current?.setFieldValue(
+      "enrolledExamTypeId",
+      data?.enrolledExamTypeId
+    );
+    formikRef?.current?.setFieldValue("phoneNo", data?.phoneNo);
+  }, [formikRef, isLoading, isFetching, data]);
 
   //   console.log(formikRef.current);
 
-  if (result.isLoading) {
+  if (result.isLoading || isLoading) {
     return <h1>Loading...</h1>;
   }
 
   return (
     <div className="flex justify-center items-center min-h-[80vh] m-2">
+      <Toaster />
       <Formik
         innerRef={formikRef}
         initialValues={{
@@ -48,8 +67,28 @@ function StudentForm() {
             .min(1)
             .required("Phone number is required"),
         })}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          // console.log(values);
+          if (data) {
+            const editData = { id: data._id, values: values };
+            await editStudent(editData).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Updated exam type");
+                // navigate("/auth/exam-types");
+              }
+            });
+          } else {
+            const addData = { values: values };
+            await addStudent(addData.values).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Added exam type");
+              }
+            });
+          }
         }}
       >
         {(formik) => {
@@ -140,8 +179,11 @@ function StudentForm() {
               <button
                 className="w-full bg-appGreen text-white px-2 py-3 rounded-xl hover:scale-105 duration-200"
                 type="submit"
+                disabled={addStudentLoading || editStudentLoading}
               >
-                Submit
+                {addStudentLoading || editStudentLoading
+                  ? "Loading..."
+                  : "Submit"}
               </button>
             </Form>
           );

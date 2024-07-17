@@ -4,7 +4,10 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
-import { useLazyGetAllStudentsQuery } from "../redux/requests/studentRequest";
+import {
+  useLazyGetAllStudentsQuery,
+  useDeleteStudentMutation,
+} from "../redux/requests/studentRequest";
 function Students() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
@@ -39,8 +42,6 @@ function Students() {
     fetch();
   }, [queryParams, paginationParams]);
 
-  console.log(data, "pagination");
-
   const prepareData = data?.docs.map((item) => {
     return {
       _id: item._id,
@@ -64,10 +65,19 @@ function Students() {
 
   const paginateOptions = data?.paginateOptions;
 
-  const handleDeleteItem = (id) => {
+  const [deleteStudent] = useDeleteStudentMutation();
+
+  const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      toast.success(`DELETE API CALL ${id}`);
+      await deleteStudent(id).then((res) => {
+        if (res.error) {
+          toast.error(`Error`);
+        } else {
+          toast.success("Successfully deleted student");
+        }
+      });
+
       return;
     }
 
@@ -103,7 +113,6 @@ function Students() {
         isLoading={isLoading}
         isError={isError}
       />
-      <div className="h-[200vh]">dddd</div>
     </div>
   );
 }
