@@ -1,12 +1,21 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useRef } from "react";
 import * as yup from "yup";
+import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
 
 function StudentForm() {
-  const examTypes = [
-    { name: "NEET", id: "uhiuwehuio" },
-    { name: "JEE", id: "uhiuwehsdfuio" },
-  ];
+  const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger();
+    };
+    fetch();
+  }, []);
+
+  const examTypes = result?.data?.map((examType) => {
+    return { name: examType.examType, id: examType.examTypeId };
+  });
 
   const formikRef = useRef();
 
@@ -16,6 +25,10 @@ function StudentForm() {
 
   //   console.log(formikRef.current);
 
+  if (result.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="flex justify-center items-center min-h-[80vh] m-2">
       <Formik
@@ -23,13 +36,13 @@ function StudentForm() {
         initialValues={{
           rollNo: "",
           studentName: "",
-          examType: "",
+          enrolledExamTypeId: "",
           phoneNo: "",
         }}
         validationSchema={yup.object({
           studentName: yup.string().required("Student Name is required"),
           rollNo: yup.string().required("Roll number is required"),
-          examType: yup.string().required("Exam Type is required"),
+          enrolledExamTypeId: yup.string().required("Exam Type is required"),
           phoneNo: yup
             .number("Phone No must be a number")
             .min(1)
@@ -40,7 +53,6 @@ function StudentForm() {
         }}
       >
         {(formik) => {
-          console.log(formik);
           return (
             <Form className="flex flex-col gap-3 w-2/3">
               <div className="flex flex-col">
@@ -87,19 +99,19 @@ function StudentForm() {
                   <Field
                     as="select"
                     id="examType"
-                    name="examType"
+                    name="enrolledExamTypeId"
                     className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                     placeholder="Exam type"
                     multiple={false}
                   >
                     <option value="">-Select exam type-</option>
-                    {examTypes.map((item) => (
+                    {examTypes?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.name}
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="examType">
+                  <ErrorMessage name="enrolledExamTypeId">
                     {(errorMessage) => (
                       <p className="text-red-500 mr-1">{errorMessage}</p>
                     )}

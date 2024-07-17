@@ -10,6 +10,10 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: ["exam-type"],
     }),
 
+    getExamTypeForDropDown: builder.query({
+      query: () => `/exam-type/all`,
+    }),
+
     getExamTypeById: builder.query({
       query: (id) => `/exam-type/${id}`,
       providesTags: ["exam-type-single"],
@@ -45,6 +49,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLazyGetExamTypeQuery,
+  useLazyGetExamTypeForDropDownQuery,
   useGetExamTypeByIdQuery,
   useUpdateExamTypeMutation,
   useAddExamTypeMutation,

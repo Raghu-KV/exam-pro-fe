@@ -30,16 +30,16 @@ function TableCompo({
     setCurrentPage(page);
   };
 
-  if (tableData?.length == 0) {
-    return <h1 className="text-center">No data found</h1>;
-  }
-
   if (isLoading) {
     return <h1 className="text-center">Loading...</h1>;
   }
 
   if (isError) {
     return <h1 className="text-center">Error! Something went wrong</h1>;
+  }
+
+  if (tableData?.length == 0) {
+    return <h1 className="text-center">No data found</h1>;
   }
 
   return (

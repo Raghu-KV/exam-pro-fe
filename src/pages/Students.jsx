@@ -4,6 +4,7 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
+import { useLazyGetAllStudentsQuery } from "../redux/requests/studentRequest";
 function Students() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
@@ -27,33 +28,41 @@ function Students() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
-  console.log(encodeURI(queryParams), "SUBJECT PARAMS", currentPage);
+  // API CALL
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetAllStudentsQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger(`${paginationParams}${queryParams}`).unwrap();
+    };
+    fetch();
+  }, [queryParams, paginationParams]);
+
+  console.log(data, "pagination");
+
+  const prepareData = data?.docs.map((item) => {
+    return {
+      _id: item._id,
+      rollNo: item.rollNo,
+      studentName: item.studentName,
+      examType: item.enrolledExamType.examType,
+      phoneNo: item.phoneNo,
+      createdAt: item.createdAt,
+    };
+  });
 
   const tableTitle = [
     { title: "Roll No.", keyName: "rollNo" },
     { title: "Student Name", keyName: "studentName" },
     { title: "Enrolled exam", keyName: "examType" },
     { title: "Phone No.", keyName: "phoneNo" },
-    { title: "Created at", keyName: "createdAt" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
-  const mockStudentData = [
-    {
-      _id: "ugiuguiwqgdqiuwgqwiudg",
-      rollNo: "123",
-      studentName: "Student name",
-      examType: "NEET",
-      phoneNo: "9872547632",
-      createdAt: "10-10-24",
-    },
-  ];
+  const mockStudentData = prepareData;
 
-  const paginateOptions = {
-    currentPage: 10,
-    totalPage: 12,
-    hasNextPage: true,
-    hasPrevPage: true,
-  };
+  const paginateOptions = data?.paginateOptions;
 
   const handleDeleteItem = (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
@@ -91,6 +100,8 @@ function Students() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isLoading={isLoading}
+        isError={isError}
       />
       <div className="h-[200vh]">dddd</div>
     </div>
