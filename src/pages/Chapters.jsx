@@ -79,6 +79,7 @@ function Chapters() {
         filterExamType={true}
         filterDate={true}
         filterSubject={true}
+        setCurrentPage={setCurrentPage}
         // // filterChapter={true}
         // filterPhoneNumber={true}
         // filterRollNumber={true}

@@ -4,6 +4,10 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  useLazyGetAllSubjectsQuery,
+  useDeleteSubjectMutation,
+} from "../redux/requests/subjectsRequest";
 
 function Subjects() {
   const [subjectName, setSubjectName] = useState("");
@@ -15,7 +19,7 @@ function Subjects() {
   useEffect(() => {
     if (subjectName || allFilter) {
       setQueryParams(
-        `?query-params=true${subjectName && subjectName}${
+        `&query-params=true${subjectName && subjectName}${
           allFilter && allFilter
         }`
       );
@@ -28,34 +32,48 @@ function Subjects() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
-  console.log(encodeURI(queryParams), "SUBJECT PARAMS");
+  //  API CALL
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetAllSubjectsQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger(`${paginationParams}${queryParams}`).unwrap();
+    };
+    fetch();
+  }, [queryParams, paginationParams]);
+
+  const prepareData = data?.docs.map((item) => {
+    return {
+      _id: item._id,
+      subjectName: item.subjectName,
+      examType: item.examType.examType,
+      createdAt: item.createdAt,
+    };
+  });
 
   const tableTitle = [
     { title: "Subject Name", keyName: "subjectName" },
     { title: "Exam Type", keyName: "examType" },
-    { title: "Created at", keyName: "createdAt" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
-  const mockStudentData = [
-    {
-      _id: "ugiuguiwqgdqiuwgqwiudg",
-      subjectName: "Maths",
-      examType: "NEET",
-      createdAt: "10-10-24",
-    },
-  ];
+  const mockStudentData = prepareData;
 
-  const paginateOptions = {
-    currentPage: 10,
-    totalPage: 12,
-    hasNextPage: true,
-    hasPrevPage: true,
-  };
+  const paginateOptions = data?.paginateOptions;
 
-  const handleDeleteItem = (id) => {
+  const [deleteSubject] = useDeleteSubjectMutation();
+
+  const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      toast.success(`DELETE API CALL ${id}`);
+      await deleteSubject(id).then((res) => {
+        if (res.error) {
+          toast.error(`Error`);
+        } else {
+          toast.success("Successfully deleted student");
+        }
+      });
       return;
     }
 
@@ -77,6 +95,7 @@ function Subjects() {
         isFilter={true}
         filterExamType={true}
         filterDate={true}
+        setCurrentPage={setCurrentPage}
         // // filterSubject={true}
         // // filterChapter={true}
         // filterPhoneNumber={true}
@@ -88,8 +107,9 @@ function Subjects() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isLoading={isLoading}
+        isError={isError}
       />
-      <div className="h-[200vh]"></div>
     </div>
   );
 }
