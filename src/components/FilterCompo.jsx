@@ -2,6 +2,7 @@ import React from "react";
 import { MdSearch, MdFilterAlt, MdClose } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
+import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
 
 function FilterCompo({
   searchItem,
@@ -107,6 +108,7 @@ function FilterCompo({
 
   const [examTypeTrigger, examTypeResult] =
     useLazyGetExamTypeForDropDownQuery();
+
   useEffect(() => {
     const fetch = async () => {
       await examTypeTrigger();
@@ -118,10 +120,22 @@ function FilterCompo({
     return { type: examType.examType, id: examType.examTypeId };
   });
 
-  const subjecteData = [
-    { id: "12112", type: "Subject 1" },
-    { id: "12142", type: "Subject 2" },
-  ];
+  // SUBJECT DROPDOWN API
+  const [subjectTrigger, subjectResult] =
+    useLazyGetAllSubjectsForDropDownQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await subjectTrigger();
+    };
+    fetch();
+  }, []);
+
+  const prpareSubjectDropDown = subjectResult?.data?.map((item) => {
+    return { id: item.subjectId, type: item.subjectName };
+  });
+
+  const subjecteData = prpareSubjectDropDown;
 
   const chapterData = [
     { id: "12112", type: "Chapter 1" },
