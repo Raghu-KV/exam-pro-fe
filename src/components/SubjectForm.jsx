@@ -56,7 +56,6 @@ function SubjectForm({ data, isLoading, isFetching }) {
           examTypeId: yup.string().required("Exam Type is required"),
         })}
         onSubmit={async (values) => {
-          console.log(values);
           if (data) {
             const editData = { id: data._id, values: values };
             await updateSubject(editData).then((res) => {

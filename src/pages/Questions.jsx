@@ -93,6 +93,7 @@ function Questions() {
         filterDate={true}
         filterSubject={true}
         filterChapter={true}
+        setCurrentPage={setCurrentPage}
         // filterPhoneNumber={true}
         // filterRollNumber={true}
       />

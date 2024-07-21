@@ -3,7 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
 import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
-function ChapterForm() {
+import toast, { Toaster } from "react-hot-toast";
+
+import {
+  useAddChapterMutation,
+  useEditChapterMutation,
+} from "../redux/requests/chapterRequest";
+function ChapterForm({ data, isLoading, isFetching }) {
   const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
   const formikRef = useRef();
 
@@ -36,25 +42,56 @@ function ChapterForm() {
   const subjectTypes = prpareSubjectDropDown;
 
   useEffect(() => {
-    // formikRef?.current.setFieldValue("rollNo", "45");
-  }, [formikRef, formikRef?.current?.values]);
+    formikRef?.current?.setFieldValue("subjectId", data?.subjectId);
+    formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
+    formikRef?.current?.setFieldValue("chapterName", data?.chapterName);
+  }, [formikRef, data, isLoading, isFetching]);
+
+  const [addChapter, { isLoading: addChapterLoading }] =
+    useAddChapterMutation();
+  const [editChapter, { isLoading: editChapterLoading }] =
+    useEditChapterMutation();
+
+  if (result.isLoading || isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-[80vh] m-2">
+      <Toaster />
       <Formik
         innerRef={formikRef}
         initialValues={{
           chapterName: "",
-          subject: "",
-          examType: "",
+          subjectId: "",
+          examTypeId: "",
         }}
         validationSchema={yup.object({
           chapterName: yup.string().required("Chapter Name is required"),
-          subject: yup.string().required("Subject is required"),
-          examType: yup.string().required("Exam Type is required"),
+          subjectId: yup.string().required("Subject is required"),
+          examTypeId: yup.string().required("Exam Type is required"),
         })}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          if (data) {
+            const editData = { id: data._id, values: values };
+            await editChapter(editData).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Updated exam type");
+                // navigate("/auth/exam-types");
+              }
+            });
+          } else {
+            const addData = { values: values };
+            await addChapter(addData.values).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Added exam type");
+              }
+            });
+          }
         }}
       >
         {(formik) => {
@@ -86,7 +123,7 @@ function ChapterForm() {
                   <Field
                     as="select"
                     id="subject"
-                    name="subject"
+                    name="subjectId"
                     className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                     placeholder="Exam type"
                     multiple={false}
@@ -98,7 +135,7 @@ function ChapterForm() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="subject">
+                  <ErrorMessage name="subjectId">
                     {(errorMessage) => (
                       <p className="text-red-500 mr-1">{errorMessage}</p>
                     )}
@@ -112,7 +149,7 @@ function ChapterForm() {
                   <Field
                     as="select"
                     id="examType"
-                    name="examType"
+                    name="examTypeId"
                     className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                     placeholder="Exam type"
                     multiple={false}
@@ -124,7 +161,7 @@ function ChapterForm() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="examType">
+                  <ErrorMessage name="examTypeId">
                     {(errorMessage) => (
                       <p className="text-red-500 mr-1">{errorMessage}</p>
                     )}
@@ -135,8 +172,11 @@ function ChapterForm() {
               <button
                 className="w-full bg-appGreen text-white px-2 py-3 rounded-xl hover:scale-105 duration-200"
                 type="submit"
+                disabled={editChapterLoading || addChapterLoading}
               >
-                Submit
+                {editChapterLoading || addChapterLoading
+                  ? "Loading..."
+                  : "Submit"}
               </button>
             </Form>
           );

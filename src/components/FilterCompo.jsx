@@ -3,6 +3,7 @@ import { MdSearch, MdFilterAlt, MdClose } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
 import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
+import { useLazyGetAllChapterForDropDownQuery } from "../redux/requests/chapterRequest";
 
 function FilterCompo({
   searchItem,
@@ -137,12 +138,24 @@ function FilterCompo({
 
   const subjecteData = prpareSubjectDropDown;
 
-  const chapterData = [
-    { id: "12112", type: "Chapter 1" },
-    { id: "12142", type: "Chapter 2" },
-  ];
+  // chapter drop dow api
+  const [cahpterTrigger, chapterResult] =
+    useLazyGetAllChapterForDropDownQuery();
 
-  if (examTypeResult.isLoading) {
+  useEffect(() => {
+    const fetch = async () => {
+      await cahpterTrigger();
+    };
+    fetch();
+  }, []);
+
+  const prparechapterDropDown = chapterResult?.data?.map((item) => {
+    return { id: item.chapterId, type: item.chapterName };
+  });
+
+  const chapterData = prparechapterDropDown;
+
+  if (examTypeResult?.isLoading || subjectResult?.isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -292,7 +305,7 @@ function FilterCompo({
                     onChange={(event) => setChapter(event.target.value)}
                   >
                     <option value="">--Select--</option>
-                    {chapterData.map((item) => (
+                    {chapterData?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.type}
                       </option>

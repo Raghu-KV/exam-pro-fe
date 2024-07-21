@@ -4,6 +4,10 @@ import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  useLazyGetAllChaptersQuery,
+  useDeleteChapterMutation,
+} from "../redux/requests/chapterRequest";
 
 function Chapters() {
   const [chapterName, setChapterName] = useState("");
@@ -15,7 +19,7 @@ function Chapters() {
   useEffect(() => {
     if (chapterName || allFilter) {
       setQueryParams(
-        `?query-params=true${chapterName && chapterName}${
+        `&query-params=true${chapterName && chapterName}${
           allFilter && allFilter
         }`
       );
@@ -28,36 +32,50 @@ function Chapters() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
-  console.log(encodeURI(queryParams), "Chapter PARAMS");
+  // API CALL
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetAllChaptersQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger(`${paginationParams}${queryParams}`).unwrap();
+    };
+    fetch();
+  }, [queryParams, paginationParams]);
+
+  const prepareData = data?.docs.map((item) => {
+    return {
+      _id: item._id,
+      chapterName: item.chapterName,
+      subjectName: item.subject.subjectName,
+      examType: item.examType.examType,
+      createdAt: item.createdAt,
+    };
+  });
 
   const tableTitle = [
     { title: "Chapter Name", keyName: "chapterName" },
     { title: "Subject Name", keyName: "subjectName" },
     { title: "Exam exam", keyName: "examType" },
-    { title: "Created at", keyName: "createdAt" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
-  const mockStudentData = [
-    {
-      _id: "ugiuguiwqgdqiuwgqwiudg",
-      chapterName: "Algbra",
-      subjectName: "Maths",
-      examType: "NEET",
-      createdAt: "10-10-24",
-    },
-  ];
+  const mockStudentData = prepareData;
 
-  const paginateOptions = {
-    currentPage: 10,
-    totalPage: 12,
-    hasNextPage: true,
-    hasPrevPage: true,
-  };
+  const paginateOptions = data?.paginateOptions;
 
-  const handleDeleteItem = (id) => {
+  const [deleteChapter] = useDeleteChapterMutation();
+
+  const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      toast.success(`DELETE API CALL ${id}`);
+      await deleteChapter(id).then((res) => {
+        if (res.error) {
+          toast.error(`Error`);
+        } else {
+          toast.success("Successfully deleted student");
+        }
+      });
       return;
     }
 
@@ -91,7 +109,6 @@ function Chapters() {
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
       />
-      <div className="h-[200vh]"></div>
     </div>
   );
 }
