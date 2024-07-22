@@ -41,6 +41,7 @@ function ChapterForm({ data, isLoading, isFetching }) {
 
   const subjectTypes = prpareSubjectDropDown;
 
+  // PREFILL FOR EDIT
   useEffect(() => {
     formikRef?.current?.setFieldValue("subjectId", data?.subjectId);
     formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
@@ -52,7 +53,7 @@ function ChapterForm({ data, isLoading, isFetching }) {
   const [editChapter, { isLoading: editChapterLoading }] =
     useEditChapterMutation();
 
-  if (result.isLoading || isLoading) {
+  if (result.isLoading || isLoading || subjectResult.isLoading) {
     return <h1>Loading...</h1>;
   }
 

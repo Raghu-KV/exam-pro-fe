@@ -2,22 +2,72 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useRef } from "react";
 import * as yup from "yup";
 
-function QuestionForm() {
-  const examTypes = [
-    { name: "NEET", id: "uhiuwehuio" },
-    { name: "JEE", id: "uhiuwehsdfuio" },
-  ];
+import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
+import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
+import { useLazyGetAllChapterForDropDownQuery } from "../redux/requests/chapterRequest";
+import {
+  useAddQuestionMutation,
+  useEditQuestionMutation,
+} from "../redux/requests/question.request";
+import toast, { Toaster } from "react-hot-toast";
 
-  const chapter = [
-    { name: "Algebra", id: "fgbwef" },
-    { name: "Trigemontery", id: "scienceID" },
-  ];
+function QuestionForm({ data, isLoading, isFetching }) {
+  // EXAM TYPE DROP DOWN
+  const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger();
+    };
+    fetch();
+  }, []);
 
-  const subject = [
-    { name: "Maths", id: "fgbwef" },
-    { name: "Science", id: "scienceID" },
-  ];
+  const examTypes = result?.data?.map((examType) => {
+    return { name: examType.examType, id: examType.examTypeId };
+  });
+
+  // SUBJECT DROPDOWN API
+  const [subjectTrigger, subjectResult] =
+    useLazyGetAllSubjectsForDropDownQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await subjectTrigger();
+    };
+    fetch();
+  }, []);
+
+  const subject = subjectResult?.data?.map((item) => {
+    return { id: item.subjectId, name: item.subjectName };
+  });
+
+  const [chapterTrigger, chapterResult] =
+    useLazyGetAllChapterForDropDownQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await chapterTrigger();
+    };
+    fetch();
+  }, []);
+
+  const chapter = chapterResult?.data?.map((item) => {
+    return { id: item.chapterId, name: item.chapterName };
+  });
+
   const formikRef = useRef();
+
+  // PREFILL VALUES
+  useEffect(() => {
+    if (data) {
+      formikRef?.current?.setFieldValue("question", data?.question);
+      formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
+      formikRef?.current?.setFieldValue("subjectId", data?.subjectId);
+      formikRef?.current?.setFieldValue("chapterId", data?.chapterId);
+      formikRef?.current?.setFieldValue("options", data?.options);
+      formikRef?.current?.setFieldValue("answerId", data?.answerId);
+      formikRef?.current?.setFieldValue("explanation", data?.explanation);
+    }
+  }, [formikRef, data, isLoading, isFetching]);
 
   // useEffect(() => {
   //   formikRef?.current.setFieldValue("options", [
@@ -46,65 +96,101 @@ function QuestionForm() {
 
   //   console.log(formikRef.current);
 
+  const [addQuestion, { isLoading: addQuestionLoading }] =
+    useAddQuestionMutation();
+  const [editQuestion, { isLoading: editQuestionLoading }] =
+    useEditQuestionMutation();
+
+  if (
+    result.isLoading ||
+    isLoading ||
+    subjectResult.isLoading ||
+    chapterResult.isLoading
+  ) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="flex justify-center items-center min-h-[80vh] m-2">
+      <Toaster />
       <Formik
         innerRef={formikRef}
         initialValues={{
           question: "",
-          examType: "",
-          subject: "",
-          chapter: "",
+          examTypeId: "",
+          subjectId: "",
+          chapterId: "",
           options: [
             {
-              optionId: crypto.randomUUID(),
+              optionId: 0,
               option: "",
               name: "option A",
             },
             {
-              optionId: crypto.randomUUID(),
+              optionId: 1,
               option: "",
               name: "option B",
             },
             {
-              optionId: crypto.randomUUID(),
+              optionId: 2,
               option: "",
               name: "option C",
             },
             {
-              optionId: crypto.randomUUID(),
+              optionId: 3,
               option: "",
               name: "option D",
             },
           ],
-          answer: "",
+          answerId: "",
+          explanation: "",
         }}
         validationSchema={yup.object({
           question: yup.string().required("Question is required"),
-          examType: yup.string().required("Exam Type is required"),
-          chapter: yup.string().required("Chapter is required"),
-          subject: yup.string().required("Subject is required"),
+          examTypeId: yup.string().required("Exam Type is required"),
+          chapterId: yup.string().required("Chapter is required"),
+          subjectId: yup.string().required("Subject is required"),
           options: yup.array().of(
             yup.object().shape({
-              optionId: yup.string().required(),
+              optionId: yup.number().required(),
               option: yup.string().required("Every 4 options are required"),
               name: yup.string().required(),
             })
           ),
-          answer: yup.string().required("Answer is required"),
+          answerId: yup.string().required("Answer is required"),
+          explanation: yup.string(),
         })}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           console.log(values);
+          if (data) {
+            const editData = {
+              id: data._id,
+              values: { ...values },
+            };
+            await editQuestion(editData).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Updated exam type");
+                // navigate("/auth/exam-types");
+              }
+            });
+          } else {
+            const addData = { ...values };
+            await addQuestion(addData).then((res) => {
+              if (res.error) {
+                toast.error("Error");
+              } else {
+                toast.success("Edited question");
+              }
+            });
+          }
         }}
       >
         {(formik) => {
-          console.log(formik);
-
-          const optionsValues = formik.values.options.filter(
-            (item) => item.option
+          const optionsValues = formik?.values?.options?.filter(
+            (item) => item?.option
           );
-
-          console.log(optionsValues);
           return (
             <Form className="flex flex-col gap-3 w-2/3">
               <div className="flex flex-col">
@@ -208,7 +294,7 @@ function QuestionForm() {
 
               <div
                 className={`flex flex-col w-full ${
-                  optionsValues.length >= 4 ? null : `opacity-45`
+                  optionsValues?.length >= 4 ? null : `opacity-45`
                 } `}
               >
                 <label htmlFor="answer" className="font-semibold ml-1">
@@ -217,22 +303,41 @@ function QuestionForm() {
                 <Field
                   as="select"
                   id="answer"
-                  name="answer"
+                  name="answerId"
                   className={`border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen`}
                   placeholder="Exam type"
                   multiple={false}
-                  disabled={optionsValues.length >= 4 ? false : true}
+                  disabled={optionsValues?.length >= 4 ? false : true}
                 >
                   <option value="">-Select Answer-</option>
-                  {optionsValues.map((item) => (
+                  {optionsValues?.map((item) => (
                     <option value={item.optionId} key={item.optionId}>
-                      {item.name}
+                      {item?.name}
                       {" --> "}
-                      {item.option}
+                      {item?.option}
                     </option>
                   ))}
                 </Field>
-                <ErrorMessage name="answer">
+                <ErrorMessage name="answerId">
+                  {(errorMessage) => (
+                    <p className="text-red-500 mr-1">{errorMessage}</p>
+                  )}
+                </ErrorMessage>
+              </div>
+
+              <div className={`flex flex-col w-full`}>
+                <label htmlFor="explanation" className="font-semibold ml-1">
+                  Explanation
+                </label>
+                <textarea
+                  id="explanation"
+                  {...formik.getFieldProps("explanation")}
+                  name="explanation"
+                  className={`border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen`}
+                  placeholder="Write your explanation... "
+                />
+
+                <ErrorMessage name="explanation">
                   {(errorMessage) => (
                     <p className="text-red-500 mr-1">{errorMessage}</p>
                   )}
@@ -247,19 +352,19 @@ function QuestionForm() {
                   <Field
                     as="select"
                     id="chapter"
-                    name="chapter"
+                    name="chapterId"
                     className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                     placeholder="Exam type"
                     multiple={false}
                   >
                     <option value="">-Select Chapter-</option>
-                    {chapter.map((item) => (
+                    {chapter?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.name}
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="chapter">
+                  <ErrorMessage name="chapterId">
                     {(errorMessage) => (
                       <p className="text-red-500 mr-1">{errorMessage}</p>
                     )}
@@ -274,19 +379,19 @@ function QuestionForm() {
                     <Field
                       as="select"
                       id="subject"
-                      name="subject"
+                      name="subjectId"
                       className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                       placeholder="Exam type"
                       multiple={false}
                     >
                       <option value="">-Select Subject-</option>
-                      {subject.map((item) => (
+                      {subject?.map((item) => (
                         <option value={item.id} key={item.id}>
                           {item.name}
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="subject">
+                    <ErrorMessage name="subjectId">
                       {(errorMessage) => (
                         <p className="text-red-500 mr-1">{errorMessage}</p>
                       )}
@@ -302,19 +407,19 @@ function QuestionForm() {
                     <Field
                       as="select"
                       id="examType"
-                      name="examType"
+                      name="examTypeId"
                       className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
                       placeholder="Exam type"
                       multiple={false}
                     >
                       <option value="">-Select Exam Type-</option>
-                      {subject.map((item) => (
+                      {examTypes?.map((item) => (
                         <option value={item.id} key={item.id}>
                           {item.name}
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="examType">
+                    <ErrorMessage name="examTypeId">
                       {(errorMessage) => (
                         <p className="text-red-500 mr-1">{errorMessage}</p>
                       )}
@@ -326,8 +431,11 @@ function QuestionForm() {
               <button
                 className="w-full bg-appGreen text-white px-2 py-3 rounded-xl hover:scale-105 duration-200"
                 type="submit"
+                disabled={addQuestionLoading || editQuestionLoading}
               >
-                Submit
+                {addQuestionLoading || editQuestionLoading
+                  ? "Loading..."
+                  : "Submit"}
               </button>
             </Form>
           );

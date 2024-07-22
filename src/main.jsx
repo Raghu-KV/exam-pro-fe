@@ -25,6 +25,7 @@ import AddChapter from "./pages/AddChapter.jsx";
 import EditChapter from "./pages/EditChapter.jsx";
 import AddQuestion from "./pages/AddQuestion.jsx";
 import EditQuestion from "./pages/EditQuestion.jsx";
+import ViewQuestion from "./pages/ViewQuestion.jsx";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: "questions/add-question",
         element: <AddQuestion />,
+      },
+      {
+        path: "questions/view/:id",
+        element: <ViewQuestion />,
       },
 
       {

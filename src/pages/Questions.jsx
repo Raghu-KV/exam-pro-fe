@@ -4,6 +4,10 @@ import FilterCompo from "../components/FilterCompo";
 import TableCompo from "../components/TableCompo";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  useLazyGetAllQuestionQuery,
+  useDeleteQuestionMutation,
+} from "../redux/requests/question.request";
 
 function Questions() {
   const [question, setQuestion] = useState("");
@@ -26,56 +30,60 @@ function Questions() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
+  // API CALL
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetAllQuestionQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await trigger(`${paginationParams}${queryParams}`).unwrap();
+    };
+    fetch();
+  }, [queryParams, paginationParams]);
+
+  const prepareData = data?.docs.map((item) => {
+    return {
+      _id: item._id,
+      question: item.question,
+      answer: item.options[item.answerId].option,
+      chapter: item.chapter.chapterName,
+      subject: item.subject.subjectName,
+      examType: item.examType.examType,
+      createdAt: item.createdAt,
+    };
+  });
+
   const tableTitle = [
     { title: "Question", keyName: "question" },
-    { title: "Options", keyName: "options" },
     { title: "Answer", keyName: "answer" },
     { title: "Chapter", keyName: "chapter" },
     { title: "Subject", keyName: "subject" },
     { title: "Exam type", keyName: "examType" },
-    { title: "Created at", keyName: "createdAt" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
-  const mockStudentData = [
-    {
-      _id: "ugiuguiwqgdqiuwgqwiudg",
-      question:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta consectetur recusandae odio quam nam blanditiis maxime molestiae omnis eveniet laboriosam distinctio nostrum aut est, dolor provident reiciendis magnam veritatis porro?",
-      options: [
-        "Algebra",
-        " | ",
-        "Trignomentory",
-        " | ",
-        "Algebsdfsdfsdfsdra",
-        " | ",
-        "Trignomsdfsdfentory",
-      ],
-      answer: "Algebra",
-      chapter: "Algebra",
-      subject: "Maths",
-      examType: "NEET",
-      createdAt: "10-02-24",
-    },
-  ];
+  const mockStudentData = prepareData;
 
-  const paginateOptions = {
-    currentPage: 10,
-    totalPage: 12,
-    hasNextPage: true,
-    hasPrevPage: true,
-  };
+  const paginateOptions = data?.paginateOptions;
 
-  const handleDeleteItem = (id) => {
+  const [deleteQuestion] = useDeleteQuestionMutation();
+
+  const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      toast.success(`DELETE API CALL ${id}`);
+      await deleteQuestion(id).then((res) => {
+        if (res.error) {
+          toast.error(`Error`);
+        } else {
+          toast.success("Successfully deleted student");
+        }
+      });
       return;
     }
 
     toast.error("Faild to delete.");
   };
-
-  console.log(encodeURI(queryParams), "QUESTION PARAMS");
+  console.log(isLoading, "kkkkkk");
   return (
     <div className="w-full">
       <Toaster />
@@ -103,8 +111,9 @@ function Questions() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isLoading={isLoading}
+        isError={isError}
       />
-      <div className="h-[200vh]"></div>
     </div>
   );
 }
