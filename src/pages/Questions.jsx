@@ -19,7 +19,7 @@ function Questions() {
   useEffect(() => {
     if (question || allFilter) {
       setQueryParams(
-        `?query-params=true${question && question}${allFilter && allFilter}`
+        `&query-params=true${question && question}${allFilter && allFilter}`
       );
     } else {
       setQueryParams("");

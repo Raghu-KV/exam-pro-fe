@@ -17,6 +17,8 @@ export const apiSlice = createApi({
     "single-chapter",
     "questions",
     "single-question",
+    "tests",
+    "single-test",
   ],
   endpoints: (builder) => ({}),
 });

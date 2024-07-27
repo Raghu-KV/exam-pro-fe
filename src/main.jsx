@@ -26,6 +26,8 @@ import EditChapter from "./pages/EditChapter.jsx";
 import AddQuestion from "./pages/AddQuestion.jsx";
 import EditQuestion from "./pages/EditQuestion.jsx";
 import ViewQuestion from "./pages/ViewQuestion.jsx";
+import AddTest from "./pages/AddTest.jsx";
+import EditTest from "./pages/EditTest.jsx";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +102,14 @@ const router = createBrowserRouter([
       {
         path: "test-types",
         element: <TestTypes />,
+      },
+      {
+        path: "test-types/add-test-type",
+        element: <AddTest />,
+      },
+      {
+        path: "test-types/edit/:id",
+        element: <EditTest />,
       },
       // QUESTIONS
       {

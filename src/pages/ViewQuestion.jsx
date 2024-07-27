@@ -48,11 +48,13 @@ function ViewQuestion() {
         {data?.explanation && (
           <div className="mt-5">
             <p className="font-bold text-2xl">Explanation:</p>
-            <p>{data?.explanation}</p>
+            <p className="mb-2 pb-2">
+              <pre className="font-inter">{data?.explanation}</pre>
+            </p>
           </div>
         )}
 
-        <div className="mt-5">
+        <div className="mt-5 pt-4 border-t-2">
           <div className="flex gap-7">
             <div>
               <p className="font-bold">Chapter:</p>
