@@ -6,8 +6,6 @@ function ViewQuestion() {
   const { id } = useParams();
   const { data, isLoading } = useGetSingleQuestionQuery(id);
 
-  console.log(data, "theGATA");
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -16,9 +14,9 @@ function ViewQuestion() {
     <div className="w-full">
       <PageHeaderComp heading={"View Question"} />
 
-      <div className="px-5">
+      <div className="px-5 pt-8">
         <div>
-          <p>Question:</p>
+          <p className="mb-2">Question:</p>
           <p className="font-bold text-3xl">{data?.question}</p>
         </div>
         <div>

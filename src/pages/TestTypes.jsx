@@ -126,7 +126,6 @@ function TestTypes() {
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
       />
-      <div className="h-[200vh]"></div>
     </div>
   );
 }

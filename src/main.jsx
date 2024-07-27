@@ -28,6 +28,7 @@ import EditQuestion from "./pages/EditQuestion.jsx";
 import ViewQuestion from "./pages/ViewQuestion.jsx";
 import AddTest from "./pages/AddTest.jsx";
 import EditTest from "./pages/EditTest.jsx";
+import ViewTest from "./pages/ViewTest.jsx";
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: "test-types/edit/:id",
         element: <EditTest />,
+      },
+      {
+        path: "test-types/view/:id",
+        element: <ViewTest />,
       },
       // QUESTIONS
       {

@@ -14,6 +14,11 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: ["single-test"],
     }),
 
+    getSingleTest: builder.query({
+      query: (id) => `/tests/${id}`,
+      providesTags: ["single-test"],
+    }),
+
     addTest: builder.mutation({
       query: (values) => ({
         url: `/tests`,
@@ -39,13 +44,24 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["tests"],
     }),
+
+    updateTime: builder.mutation({
+      query: ({ id, values }) => ({
+        url: `/tests/${id}/updateTiming`,
+        method: "PATCH",
+        body: values,
+      }),
+      invalidatesTags: ["single-test"],
+    }),
   }),
 });
 
 export const {
   useLazyGetAllTestsQuery,
   useGetTestPrefillQuery,
+  useGetSingleTestQuery,
   useAddTestMutation,
   useDeleteTestMutation,
   useUpdateTestMutation,
+  useUpdateTimeMutation,
 } = extendedApiSlice;
