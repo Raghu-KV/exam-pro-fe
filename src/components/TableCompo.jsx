@@ -20,6 +20,7 @@ function TableCompo({
   handleDeleteItem,
   isLoading,
   isError,
+  isActions = true,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,9 +61,11 @@ function TableCompo({
                 {title.title}
               </th>
             ))}
-            <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
-              Actions
-            </th>
+            {isActions && (
+              <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
+                Actions
+              </th>
+            )}
           </tr>
         </thead>
 
@@ -80,7 +83,7 @@ function TableCompo({
 
               {tableTitle.map((itemData, i) => (
                 <td
-                  className="table-cell px-3 py-1 border-b border-appDarkBlue border-r"
+                  className="table-cell px-3 py-3 border-b border-appDarkBlue border-r"
                   key={i}
                 >
                   {itemData.isDate
@@ -90,31 +93,33 @@ function TableCompo({
               ))}
 
               {/* TABLE ACTIONS */}
-              <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
-                <div className="flex items-center justify-center">
-                  {!["exam-types"].includes(currentLoaction) && (
-                    <p
-                      className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
-                      onClick={() => navigate(`view/${item._id}`)}
-                    >
-                      <MdInfo size={25} />
-                    </p>
-                  )}
+              {isActions && (
+                <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
+                  <div className="flex items-center justify-center">
+                    {!["exam-types"].includes(currentLoaction) && (
+                      <p
+                        className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
+                        onClick={() => navigate(`view/${item._id}`)}
+                      >
+                        <MdInfo size={25} />
+                      </p>
+                    )}
 
-                  <p
-                    className="cursor-pointer text-appDarkBlue px-1 py-1 hover:bg-appDarkBlue/20 duration-150 rounded-xl"
-                    onClick={() => navigate(`edit/${item._id}`)}
-                  >
-                    <MdCreate size={25} />
-                  </p>
-                  <p
-                    className="cursor-pointer text-red-500 px-1 py-1 hover:bg-red-500/20 duration-150 rounded-xl"
-                    onClick={() => handleDeleteItem(item._id)}
-                  >
-                    <MdDelete size={25} />
-                  </p>
-                </div>
-              </td>
+                    <p
+                      className="cursor-pointer text-appDarkBlue px-1 py-1 hover:bg-appDarkBlue/20 duration-150 rounded-xl"
+                      onClick={() => navigate(`edit/${item._id}`)}
+                    >
+                      <MdCreate size={25} />
+                    </p>
+                    <p
+                      className="cursor-pointer text-red-500 px-1 py-1 hover:bg-red-500/20 duration-150 rounded-xl"
+                      onClick={() => handleDeleteItem(item._id)}
+                    >
+                      <MdDelete size={25} />
+                    </p>
+                  </div>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

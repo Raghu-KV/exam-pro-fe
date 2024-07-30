@@ -1,6 +1,7 @@
 import { MdOutlineTimer } from "react-icons/md";
 import { useState } from "react";
 import { useUpdateTimeMutation } from "../redux/requests/testTypesRequest";
+import toast, { Toaster } from "react-hot-toast";
 
 function TimingCompo({ testTiming, paramId }) {
   const [updateTime, { isLoading }] = useUpdateTimeMutation();
@@ -37,7 +38,7 @@ function TimingCompo({ testTiming, paramId }) {
     const prepareData = { id: paramId, values: { testTiming: time } };
     await updateTime(prepareData).then((res) => {
       if (res.error) {
-        toast.error("Error");
+        toast.error(res.error.data.message);
       } else {
         toast.success("Updated time");
       }
@@ -45,7 +46,8 @@ function TimingCompo({ testTiming, paramId }) {
   };
 
   return (
-    <div className="bg-gradient-to-tr from-appGreen/90 to-appGreen p-4 w-1/3 rounded-xl text-white">
+    <div className="bg-gradient-to-tr from-appGreen/80 to-appGreen p-4 w-1/3 rounded-xl text-white">
+      <Toaster />
       <div className=" flex items-center gap-2  pb-2">
         <div>
           <MdOutlineTimer color="white" size={65} />

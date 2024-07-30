@@ -1,7 +1,7 @@
-import React from "react";
-import PageHeaderComp from "../components/PageHeaderComp";
-import FilterCompo from "../components/FilterCompo";
-import TableCompo from "../components/TableCompo";
+// import PageHeaderComp from "./components/PageHeaderComp";
+
+import FilterCompo from "./FilterCompo";
+import TableCompo from "./TableCompo";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -9,12 +9,18 @@ import {
   useDeleteQuestionMutation,
 } from "../redux/requests/question.request";
 
-function Questions() {
+import { useParams } from "react-router-dom";
+
+import { useLazyGetAllQuestionsForTestQuery } from "../redux/requests/testTypesRequest";
+
+function ViewQuestionComp() {
   const [question, setQuestion] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationParams, setPaginationParams] = useState("");
+
+  const { id } = useParams();
 
   useEffect(() => {
     if (question || allFilter) {
@@ -32,11 +38,14 @@ function Questions() {
 
   // API CALL
   const [trigger, { isLoading, isError, data, error }] =
-    useLazyGetAllQuestionQuery();
+    useLazyGetAllQuestionsForTestQuery();
 
   useEffect(() => {
     const fetch = async () => {
-      await trigger(`${paginationParams}${queryParams}`).unwrap();
+      await trigger({
+        id: id,
+        filterOptions: `${paginationParams}${queryParams}`,
+      }).unwrap();
     };
     fetch();
   }, [queryParams, paginationParams]);
@@ -48,8 +57,6 @@ function Questions() {
       answer: item.options[item.answerId].option,
       chapter: item.chapter.chapterName,
       subject: item.subject.subjectName,
-      examType: item.examType.examType,
-      createdAt: item.createdAt,
     };
   });
 
@@ -58,8 +65,6 @@ function Questions() {
     { title: "Answer", keyName: "answer" },
     { title: "Chapter", keyName: "chapter" },
     { title: "Subject", keyName: "subject" },
-    { title: "Exam type", keyName: "examType" },
-    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
 
   const mockStudentData = prepareData;
@@ -83,22 +88,17 @@ function Questions() {
 
     toast.error("Faild to delete.");
   };
-  // console.log(isLoading, "kkkkkk");
+  console.log(isLoading, "kkkkkk");
   return (
-    <div className="w-full">
+    <div className="w-full border-b pb-1 border-appDarkBlue">
       <Toaster />
-      <PageHeaderComp
-        heading={"Questions"}
-        buttonContent={"Add question"}
-        route={"/auth/questions/add-question"}
-      />
 
       <FilterCompo
         setSearchItem={setQuestion}
         setAllFilter={setAllFilter}
         isFilter={true}
-        filterExamType={true}
-        filterDate={true}
+        // filterExamType={true}
+        // filterDate={true}
         filterSubject={true}
         filterChapter={true}
         setCurrentPage={setCurrentPage}
@@ -113,9 +113,10 @@ function Questions() {
         handleDeleteItem={handleDeleteItem}
         isLoading={isLoading}
         isError={isError}
+        isActions={false}
       />
     </div>
   );
 }
 
-export default Questions;
+export default ViewQuestionComp;

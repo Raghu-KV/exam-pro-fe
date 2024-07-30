@@ -9,6 +9,14 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: ["tests"],
     }),
 
+    getAllQuestionsForTest: builder.query({
+      query: ({ id, filterOptions }) => {
+        return filterOptions
+          ? `/tests/${id}/getQuestions${filterOptions}`
+          : `/tests/${id}/getQuestions`;
+      },
+    }),
+
     getTestPrefill: builder.query({
       query: (id) => `/tests/${id}/prefill`,
       providesTags: ["single-test"],
@@ -17,6 +25,10 @@ const extendedApiSlice = apiSlice.injectEndpoints({
     getSingleTest: builder.query({
       query: (id) => `/tests/${id}`,
       providesTags: ["single-test"],
+    }),
+
+    getAllQuestionNoPagenation: builder.query({
+      query: (id) => `/tests/${id}/getQuestionsNoPagination`,
     }),
 
     addTest: builder.mutation({
@@ -53,15 +65,36 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["single-test"],
     }),
+
+    chagePublish: builder.mutation({
+      query: (id) => ({
+        url: `/tests/${id}/publish`,
+        method: "POST",
+      }),
+      invalidatesTags: ["single-test"],
+    }),
+
+    updateQuestions: builder.mutation({
+      query: ({ id, questionsId }) => ({
+        url: `/tests/${id}/updateQuestions`,
+        method: "PATCH",
+        body: { questionsId },
+      }),
+      invalidatesTags: ["single-test"],
+    }),
   }),
 });
 
 export const {
   useLazyGetAllTestsQuery,
+  useLazyGetAllQuestionsForTestQuery,
+  useGetAllQuestionNoPagenationQuery,
   useGetTestPrefillQuery,
   useGetSingleTestQuery,
   useAddTestMutation,
   useDeleteTestMutation,
   useUpdateTestMutation,
   useUpdateTimeMutation,
+  useChagePublishMutation,
+  useUpdateQuestionsMutation,
 } = extendedApiSlice;

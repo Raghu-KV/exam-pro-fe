@@ -29,6 +29,7 @@ import ViewQuestion from "./pages/ViewQuestion.jsx";
 import AddTest from "./pages/AddTest.jsx";
 import EditTest from "./pages/EditTest.jsx";
 import ViewTest from "./pages/ViewTest.jsx";
+import PrepareQuestions from "./pages/PrepareQuestions.jsx";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
       {
         path: "test-types/view/:id",
         element: <ViewTest />,
+      },
+      {
+        path: "test-types/prepare-questions/:id",
+        element: <PrepareQuestions />,
       },
       // QUESTIONS
       {
