@@ -8,7 +8,7 @@ import { MdArrowBackIos, MdArrowForwardIos, MdAdd } from "react-icons/md";
 import { addQuestions } from "../redux/reducers/prepareQuestion-reducer";
 import { useDispatch, useSelector } from "react-redux";
 
-function SelectQuestions() {
+function SelectQuestions({ setChanged }) {
   const [question, setQuestion] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
@@ -49,6 +49,7 @@ function SelectQuestions() {
   };
 
   const handleAddQuestion = (data) => {
+    setChanged(true);
     dispatch(addQuestions(data));
     toast.success("Successfully added question");
   };

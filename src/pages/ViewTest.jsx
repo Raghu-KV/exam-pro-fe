@@ -5,11 +5,12 @@ import { MdDoNotDisturbAlt } from "react-icons/md";
 import { MdDone } from "react-icons/md";
 import TimingCompo from "../components/TimingCompo";
 import { MdPeopleAlt } from "react-icons/md";
+
 import CalenderCompo from "../components/CalenderCompo";
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import { useState } from "react";
 import ViewQuestionComp from "../components/ViewQuestionsComp";
-import { MdOutlineQuestionMark } from "react-icons/md";
+import { MdOutlineQuestionMark, MdBallot } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useChagePublishMutation } from "../redux/requests/testTypesRequest";
 import toast, { Toaster } from "react-hot-toast";
@@ -83,7 +84,7 @@ function ViewTest() {
 
           <div className="flex gap-5">
             <div className="flex flex-col">
-              <div className="bg-gradient-to-tr from-appLightGray/80 to-appLightGray p-4 rounded-t-xl text-appDarkBlue">
+              <div className="bg-gradient-to-tr from-gray-200 to-gray-300 p-4 rounded-t-xl text-appDarkBlue">
                 <div className="flex flex-col items-center justify-center">
                   <div>
                     <MdPeopleAlt size={60} />
@@ -99,6 +100,25 @@ function ViewTest() {
                 Total Students : {data?.totalStudents}
               </div>
             </div>
+
+            <div className="flex flex-col">
+              <div className="bg-gradient-to-tr from-appDarkBlue/80 to-appDarkBlue p-4 rounded-t-xl text-gray-100">
+                <div className="flex flex-col items-center justify-center">
+                  <div>
+                    <MdBallot size={60} />
+                  </div>
+                  <div>
+                    <p className=" font-bold text-2xl">
+                      {data?.questionsId?.length}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gradient-to-tr from-gray-100 to-gray-200 border border-appDarkBlue w-full text-appDarkBlue p-1 px-5 rounded-b-xl">
+                Total Questions
+              </div>
+            </div>
+
             {data?.isPublished && <CalenderCompo date={data?.publishedAt} />}
           </div>
         </div>

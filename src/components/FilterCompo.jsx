@@ -18,6 +18,7 @@ function FilterCompo({
   filterRollNumber,
   filterPhoneNumber,
   setCurrentPage,
+  filterPublish,
 }) {
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -29,6 +30,7 @@ function FilterCompo({
   const [chapter, setChapter] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
+  const [publishStatus, setPublishStatus] = useState("");
 
   //   const [allFilter, setAllFilter] = useState("");
   //   const [searchItem, setSearchItem] = useState("");
@@ -41,6 +43,7 @@ function FilterCompo({
     setChapter("");
     setRollNo("");
     setPhoneNo("");
+    setPublishStatus("");
   };
 
   const handleApplyFilter = () => {
@@ -52,7 +55,8 @@ function FilterCompo({
       subject ||
       chapter ||
       rollNo ||
-      phoneNo
+      phoneNo ||
+      publishStatus
     ) {
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
         subject && `&subject=${subject}`
@@ -60,7 +64,7 @@ function FilterCompo({
         phoneNo && `&phone_no=${phoneNo}`
       }${startDate && `&start_date=${startDate}`}${
         endDate && `&end_date=${endDate}`
-      }`;
+      }${publishStatus && `&publish_status=${publishStatus}`}`;
 
       setAllFilter(filterQuery);
     } else {
@@ -91,7 +95,8 @@ function FilterCompo({
       subject ||
       chapter ||
       rollNo ||
-      phoneNo
+      phoneNo ||
+      publishStatus
     ) {
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
         subject && `&subject=${subject}`
@@ -99,7 +104,7 @@ function FilterCompo({
         phoneNo && `&phone_no=${phoneNo}`
       }${startDate && `&start_date=${startDate}`}${
         endDate && `&end_date=${endDate}`
-      }`;
+      }${publishStatus && `&publish_status=${publishStatus}`}`;
 
       setAllFilter(filterQuery);
     } else {
@@ -283,6 +288,30 @@ function FilterCompo({
                         {item.type}
                       </option>
                     ))}
+                  </select>
+                </div>
+              )}
+
+              {/* PUBLISHED STATUS */}
+              {filterPublish && (
+                <div className="basis-1/4 text-appDarkBlue">
+                  <label
+                    htmlFor="publishStatus"
+                    className="block  font-semibold ml-1"
+                  >
+                    Publish Status:
+                  </label>
+                  <select
+                    name="publishStatus"
+                    id="publishStatus"
+                    className="mt-1 px-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 
+           focus:ring-appGreen placeholder-slate-400"
+                    value={publishStatus}
+                    onChange={(event) => setPublishStatus(event.target.value)}
+                  >
+                    <option value="">--Select--</option>
+                    <option value="published">Published</option>
+                    <option value="notPublished">Not published</option>
                   </select>
                 </div>
               )}

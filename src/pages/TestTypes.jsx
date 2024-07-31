@@ -118,6 +118,7 @@ function TestTypes() {
         // filterChapter={true}
         // filterPhoneNumber={true}
         // filterRollNumber={true}
+        filterPublish={true}
       />
       <TableCompo
         tableTitle={tableTitle}
