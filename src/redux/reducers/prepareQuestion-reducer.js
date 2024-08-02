@@ -3,11 +3,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // /tests/${id}/getQuestionsNoPagination
 const baseUrl = "http://localhost:8080";
 
+const token = localStorage.getItem("auth-token");
+
+const options = {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`, // Set content type to JSON
+  },
+};
+
 export const getAllQuestionsThunk = createAsyncThunk(
   "/getQuestionsNoPagination",
   async (id) => {
     const responce = await fetch(
-      `${baseUrl}/tests/${id}/getQuestionsNoPagination`
+      `${baseUrl}/tests/${id}/getQuestionsNoPagination`,
+      options
     );
     const data = responce.json();
 

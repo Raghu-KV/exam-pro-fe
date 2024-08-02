@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { isNavOpen } from "../redux/reducers/nav-reducer";
+import { useLogoutMutation } from "../redux/requests/adminRequest";
 
 const navMenu = [
   {
@@ -74,6 +75,8 @@ function SideBar() {
     dispatch(isNavOpen({ value: !navState.value }));
   };
 
+  const [logout, { isLoading }] = useLogoutMutation();
+
   return (
     <div
       className={`h-screen px-4 py-4 font-inter text-appGray border-r-2 flex flex-col justify-between ${
@@ -115,10 +118,19 @@ function SideBar() {
 
       <div
         className="p-2 rounded-lg flex items-center font-semibold gap-2 text-sm hover:bg-appLightGray/30 duration-200 cursor-pointer"
-        onClick={() => navigate("/")}
+        onClick={async () => {
+          await logout().unwrap();
+          navigate("/");
+        }}
       >
-        <MdLogout size={25} />
-        {navState.value && <p>Log Out</p>}
+        {isLoading ? (
+          "Loading..."
+        ) : (
+          <>
+            <MdLogout size={25} />
+            {navState.value && <p>Log Out</p>}
+          </>
+        )}
       </div>
     </div>
   );

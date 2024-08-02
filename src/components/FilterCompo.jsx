@@ -218,7 +218,7 @@ function FilterCompo({
                     onChange={(event) => setExamType(event.target.value)}
                   >
                     <option value="">--Select--</option>
-                    {examTypeData.map((item) => (
+                    {examTypeData?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.type}
                       </option>
@@ -283,7 +283,7 @@ function FilterCompo({
                     onChange={(event) => setSubjet(event.target.value)}
                   >
                     <option value="">--Select--</option>
-                    {subjecteData.map((item) => (
+                    {subjecteData?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.type}
                       </option>
