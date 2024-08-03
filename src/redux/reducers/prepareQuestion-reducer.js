@@ -1,30 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-// /tests/${id}/getQuestionsNoPagination
-const baseUrl = "http://localhost:8080";
-
-const token = localStorage.getItem("auth-token");
-
-const options = {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`, // Set content type to JSON
-  },
-};
-
-export const getAllQuestionsThunk = createAsyncThunk(
-  "/getQuestionsNoPagination",
-  async (id) => {
-    const responce = await fetch(
-      `${baseUrl}/tests/${id}/getQuestionsNoPagination`,
-      options
-    );
-    const data = responce.json();
-
-    return data;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
 
 const questionsState = createSlice({
   name: "questionState",
@@ -45,17 +19,6 @@ const questionsState = createSlice({
     addQuestions: (state, action) => {
       state.value = [action.payload, ...state.value];
     },
-  },
-
-  extraReducers: (builder) => {
-    builder.addCase(getAllQuestionsThunk.pending, (state) => {
-      state.isLoading = true;
-    });
-
-    builder.addCase(getAllQuestionsThunk.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.value = action.payload;
-    });
   },
 });
 

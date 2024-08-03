@@ -7,10 +7,10 @@ import WideCard from "../components/WideCard";
 import { MdOutlineRemove } from "react-icons/md";
 import { removeQuestion } from "../redux/reducers/prepareQuestion-reducer";
 import { useEffect } from "react";
-import { getAllQuestionsThunk } from "../redux/reducers/prepareQuestion-reducer";
 import SelectQuestions from "../components/SelectQuestions";
 import { useUpdateQuestionsMutation } from "../redux/requests/testTypesRequest";
 import { useBlocker } from "react-router-dom";
+import { useGetAllQuestionNoPagenationQuery } from "../redux/requests/testTypesRequest";
 
 function PrepareQuestions() {
   const { id } = useParams();
@@ -21,9 +21,11 @@ function PrepareQuestions() {
   const [updateQuestions, { isLoading: updateQuestionsIsLoading }] =
     useUpdateQuestionsMutation();
 
-  useEffect(() => {
-    dispatch(getAllQuestionsThunk(id));
-  }, [dispatch]);
+  const { data } = useGetAllQuestionNoPagenationQuery(id);
+
+  // useEffect(() => {
+  //   dispatch(getAllQuestionsThunk(id));
+  // }, [dispatch]);
 
   useEffect(() => {
     if (changed) {

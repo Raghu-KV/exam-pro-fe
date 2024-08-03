@@ -30,6 +30,8 @@ import AddTest from "./pages/AddTest.jsx";
 import EditTest from "./pages/EditTest.jsx";
 import ViewTest from "./pages/ViewTest.jsx";
 import PrepareQuestions from "./pages/PrepareQuestions.jsx";
+import ViewSubject from "./pages/ViewSubject.jsx";
+import ViewChapter from "./pages/ViewChapter.jsx";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,10 @@ const router = createBrowserRouter([
         path: "subjects/edit/:id",
         element: <EditSubject />,
       },
+      {
+        path: "subjects/view/:id",
+        element: <ViewSubject />,
+      },
       // CHAPTER
       {
         path: "chapters",
@@ -99,6 +105,10 @@ const router = createBrowserRouter([
       {
         path: "chapters/edit/:id",
         element: <EditChapter />,
+      },
+      {
+        path: "chapters/view/:id",
+        element: <ViewChapter />,
       },
       // TEST TYPES
       {

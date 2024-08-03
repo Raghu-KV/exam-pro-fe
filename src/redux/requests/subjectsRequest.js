@@ -18,6 +18,13 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       query: () => `/subjects/all`,
     }),
 
+    getSingleSubjectView: builder.query({
+      query: (values) => {
+        return values.search
+          ? `/subjects/view/${values.id}${values.search}`
+          : `/subjects/view/${values.id}`;
+      },
+    }),
     postSubject: builder.mutation({
       query: (values) => ({
         url: `/subjects`,
@@ -49,6 +56,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetAllSubjectsQuery,
   useLazyGetAllSubjectsForDropDownQuery,
+  useLazyGetSingleSubjectViewQuery,
   useGetSingleSubjectQuery,
   usePostSubjectMutation,
   useUpdateSubjectMutation,

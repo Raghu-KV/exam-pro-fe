@@ -13,6 +13,13 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       query: () => `/chapters/all`,
     }),
 
+    getSingleChapterView: builder.query({
+      query: (values) => {
+        return values.search
+          ? `/chapters/view/${values.id}${values.search}`
+          : `/chapters/view/${values.id}`;
+      },
+    }),
     getChapterById: builder.query({
       query: (id) => `/chapters/${id}`,
       providesTags: ["single-chapter"],
@@ -49,6 +56,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetAllChaptersQuery,
   useLazyGetAllChapterForDropDownQuery,
+  useLazyGetSingleChapterViewQuery,
   useGetChapterByIdQuery,
   useAddChapterMutation,
   useEditChapterMutation,

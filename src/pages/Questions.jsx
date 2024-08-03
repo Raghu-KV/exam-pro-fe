@@ -43,13 +43,13 @@ function Questions() {
 
   const prepareData = data?.docs.map((item) => {
     return {
-      _id: item._id,
-      question: item.question,
-      answer: item.options[item.answerId].option,
-      chapter: item.chapter.chapterName,
-      subject: item.subject.subjectName,
-      examType: item.examType.examType,
-      createdAt: item.createdAt,
+      _id: item?._id,
+      question: item?.question,
+      answer: item?.options[item.answerId]?.option,
+      chapter: item?.chapter?.chapterName,
+      subject: item?.subject?.subjectName,
+      examType: item?.examType?.examType,
+      createdAt: item?.createdAt,
     };
   });
 

@@ -1,4 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
+import { setAllQuestions } from "../reducers/prepareQuestion-reducer";
 
 const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,6 +30,14 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 
     getAllQuestionNoPagenation: builder.query({
       query: (id) => `/tests/${id}/getQuestionsNoPagination`,
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setAllQuestions(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
 
     addTest: builder.mutation({
