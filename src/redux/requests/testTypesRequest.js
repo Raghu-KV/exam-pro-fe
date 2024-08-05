@@ -97,7 +97,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetAllTestsQuery,
   useLazyGetAllQuestionsForTestQuery,
-  useGetAllQuestionNoPagenationQuery,
+  useLazyGetAllQuestionNoPagenationQuery,
   useGetTestPrefillQuery,
   useGetSingleTestQuery,
   useAddTestMutation,

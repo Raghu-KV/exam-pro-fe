@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import SelectQuestions from "../components/SelectQuestions";
 import { useUpdateQuestionsMutation } from "../redux/requests/testTypesRequest";
 import { useBlocker } from "react-router-dom";
-import { useGetAllQuestionNoPagenationQuery } from "../redux/requests/testTypesRequest";
+import { useLazyGetAllQuestionNoPagenationQuery } from "../redux/requests/testTypesRequest";
 
 function PrepareQuestions() {
   const { id } = useParams();
@@ -21,11 +21,16 @@ function PrepareQuestions() {
   const [updateQuestions, { isLoading: updateQuestionsIsLoading }] =
     useUpdateQuestionsMutation();
 
-  const { data } = useGetAllQuestionNoPagenationQuery(id);
+  const [trigger, { isLoading, isError, data, error }] =
+    useLazyGetAllQuestionNoPagenationQuery();
 
-  // useEffect(() => {
-  //   dispatch(getAllQuestionsThunk(id));
-  // }, [dispatch]);
+  console.log(isLoading, "OOOIIII");
+
+  useEffect(() => {
+    const fetch = async () => await trigger(id).unwrap();
+
+    fetch();
+  }, []);
 
   useEffect(() => {
     if (changed) {
@@ -51,7 +56,6 @@ function PrepareQuestions() {
   );
 
   const allQuestions = useSelector((state) => state.prepareQuestions.value);
-  const isLoading = useSelector((state) => state.prepareQuestions.isLoading);
 
   const handleRemoveQuestion = (id) => {
     setChanged(true);
