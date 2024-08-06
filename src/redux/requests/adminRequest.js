@@ -1,7 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
 
-import { useNavigate } from "react-router-dom";
-
 const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({

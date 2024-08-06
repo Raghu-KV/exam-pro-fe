@@ -24,8 +24,6 @@ function PrepareQuestions() {
   const [trigger, { isLoading, isError, data, error }] =
     useLazyGetAllQuestionNoPagenationQuery();
 
-  console.log(isLoading, "OOOIIII");
-
   useEffect(() => {
     const fetch = async () => await trigger(id).unwrap();
 
