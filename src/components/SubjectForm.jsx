@@ -31,8 +31,10 @@ function SubjectForm({ data, isLoading, isFetching }) {
     useUpdateSubjectMutation();
 
   useEffect(() => {
-    formikRef?.current?.setFieldValue("subjectName", data?.subjectName);
-    formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
+    if (data) {
+      formikRef?.current?.setFieldValue("subjectName", data?.subjectName);
+      formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
+    }
   }, [formikRef, data, isLoading, isFetching]);
 
   //   console.log(formikRef.current);
@@ -84,7 +86,7 @@ function SubjectForm({ data, isLoading, isFetching }) {
               Subject name *
             </label>
             <Field
-              type="string"
+              type="text"
               id="subjectName"
               name="subjectName"
               className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"

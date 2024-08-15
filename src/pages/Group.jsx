@@ -1,38 +1,37 @@
-import React from "react";
 import PageHeaderComp from "../components/PageHeaderComp";
 import FilterCompo from "../components/FilterCompo";
 import { useState, useEffect } from "react";
 import TableCompo from "../components/TableCompo";
 import toast, { Toaster } from "react-hot-toast";
 import {
-  useLazyGetAllTestsQuery,
-  useDeleteTestMutation,
-} from "../redux/requests/testTypesRequest";
+  useLazyGetAllGroupsQuery,
+  useDeleteGroupMutation,
+} from "../redux/requests/groupRequest";
 
-function TestTypes() {
-  const [testType, setTestType] = useState("");
+function Group() {
+  const [groupName, setGrouprName] = useState("");
   const [allFilter, setAllFilter] = useState("");
   const [queryParams, setQueryParams] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationParams, setPaginationParams] = useState("");
 
   useEffect(() => {
-    if (testType || allFilter) {
+    if (groupName || allFilter) {
       setQueryParams(
-        `&query-params=true${testType && testType}${allFilter && allFilter}`
+        `&query-params=true${groupName && groupName}${allFilter && allFilter}`
       );
     } else {
       setQueryParams("");
     }
-  }, [testType, allFilter]);
+  }, [groupName, allFilter]);
 
   useEffect(() => {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
-    useLazyGetAllTestsQuery();
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
+    useLazyGetAllGroupsQuery();
 
   useEffect(() => {
     const fetch = async () => {
@@ -41,52 +40,34 @@ function TestTypes() {
     fetch();
   }, [queryParams, paginationParams]);
 
-  const publishedTrueJsx = (
-    <span className="bg-green-500 rounded-lg py-[5px] px-[14px]  text-white">
-      Published
-    </span>
-  );
-
-  const publishedFalseJsx = (
-    <span className="bg-red-500 rounded-lg py-[5px] px-[14px]  text-white">
-      Not Published
-    </span>
-  );
-
   const prepareData = data?.docs.map((item) => {
     return {
       _id: item._id,
-      testName: item.testName,
+      groupName: item.groupName,
       examType: item.examType.examType,
-      isPublished: item.isPublished ? publishedTrueJsx : publishedFalseJsx,
-      publishedAt: item.publishedAt ? item.publishedAt : "",
+      createdAt: item.createdAt,
     };
   });
 
   const tableTitle = [
-    { title: "Test Name", keyName: "testName" },
-    { title: "Exam type", keyName: "examType" },
-    { title: "Published", keyName: "isPublished" },
-    // { title: "Total QU", keyName: "totalQuestions" },
-    { title: "Published at", keyName: "publishedAt", isDate: true },
-    // { title: "Attended No.", keyName: "attendedNo" },
+    { title: "Group Name", keyName: "groupName" },
+    { title: "Exam exam", keyName: "examType" },
+    { title: "Created at", keyName: "createdAt", isDate: true },
   ];
-
   const mockStudentData = prepareData;
 
   const paginateOptions = data?.paginateOptions;
 
-  const [deleteTest] = useDeleteTestMutation();
+  const [deleteGroup] = useDeleteGroupMutation();
 
   const handleDeleteItem = async (id) => {
     const permission = prompt(`are you sure want to delete ?  if yes type "Y"`);
     if (permission && permission.toLowerCase() == "y") {
-      await deleteTest(id).then((res) => {
+      await deleteGroup(id).then((res) => {
         if (res.error) {
-          console.log(res);
-          toast.error(res.error.data.message);
+          toast.error(`Error`);
         } else {
-          toast.success("Successfully deleted Test");
+          toast.success("Successfully deleted student");
         }
       });
       return;
@@ -99,23 +80,22 @@ function TestTypes() {
     <div className="w-full">
       <Toaster />
       <PageHeaderComp
-        heading={"Test Types"}
-        buttonContent={"Add test type"}
-        route={"/auth/test-types/add-test-type"}
+        heading={"Groups"}
+        buttonContent={"Add group"}
+        route={"/auth/groups/add-group"}
       />
-
       <FilterCompo
-        setSearchItem={setTestType}
+        setSearchItem={setGrouprName}
         setAllFilter={setAllFilter}
         isFilter={true}
         filterExamType={true}
         filterDate={true}
-        setCurrentPage={setCurrentPage}
+        // filterGroup={true}
         // filterSubject={true}
-        // filterChapter={true}
+        setCurrentPage={setCurrentPage}
+        // // filterChapter={true}
         // filterPhoneNumber={true}
         // filterRollNumber={true}
-        filterPublish={true}
       />
       <TableCompo
         tableTitle={tableTitle}
@@ -128,4 +108,4 @@ function TestTypes() {
   );
 }
 
-export default TestTypes;
+export default Group;

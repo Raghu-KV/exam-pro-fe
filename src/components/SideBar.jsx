@@ -11,6 +11,7 @@ import {
   MdMenuBook,
   MdOutlineArticle,
   MdNotifications,
+  MdGroups,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -33,6 +34,11 @@ const navMenu = [
     title: "Exam Types",
     icon: <MdNewspaper size={25} />,
     link: "/auth/exam-types",
+  },
+  {
+    title: "Groups",
+    icon: <MdGroups size={25} />,
+    link: "/auth/groups",
   },
   {
     title: "Subjects",

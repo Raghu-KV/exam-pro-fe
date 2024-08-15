@@ -43,9 +43,11 @@ function ChapterForm({ data, isLoading, isFetching }) {
 
   // PREFILL FOR EDIT
   useEffect(() => {
-    formikRef?.current?.setFieldValue("subjectId", data?.subjectId);
-    formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
-    formikRef?.current?.setFieldValue("chapterName", data?.chapterName);
+    if (data) {
+      formikRef?.current?.setFieldValue("subjectId", data?.subjectId);
+      formikRef?.current?.setFieldValue("examTypeId", data?.examTypeId);
+      formikRef?.current?.setFieldValue("chapterName", data?.chapterName);
+    }
   }, [formikRef, data, isLoading, isFetching]);
 
   const [addChapter, { isLoading: addChapterLoading }] =

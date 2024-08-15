@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLazyGetExamTypeForDropDownQuery } from "../redux/requests/examTypeRequest";
 import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
 import { useLazyGetAllChapterForDropDownQuery } from "../redux/requests/chapterRequest";
+import { useLazyGetAllGroupsForDropDownQuery } from "../redux/requests/groupRequest";
 
 function FilterCompo({
   searchItem,
@@ -19,6 +20,7 @@ function FilterCompo({
   filterPhoneNumber,
   setCurrentPage,
   filterPublish,
+  filterGroup,
 }) {
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -28,6 +30,7 @@ function FilterCompo({
   const [endDate, setEndDate] = useState("");
   const [subject, setSubjet] = useState("");
   const [chapter, setChapter] = useState("");
+  const [group, setGroup] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [publishStatus, setPublishStatus] = useState("");
@@ -44,6 +47,7 @@ function FilterCompo({
     setRollNo("");
     setPhoneNo("");
     setPublishStatus("");
+    setGroup("");
   };
 
   const handleApplyFilter = () => {
@@ -56,15 +60,19 @@ function FilterCompo({
       chapter ||
       rollNo ||
       phoneNo ||
-      publishStatus
+      publishStatus ||
+      group
     ) {
+      console.log(group, "jjj");
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
         subject && `&subject=${subject}`
       }${chapter && `&chapter=${chapter}`}${rollNo && `&roll_no=${rollNo}`}${
         phoneNo && `&phone_no=${phoneNo}`
       }${startDate && `&start_date=${startDate}`}${
         endDate && `&end_date=${endDate}`
-      }${publishStatus && `&publish_status=${publishStatus}`}`;
+      }${publishStatus && `&publish_status=${publishStatus}`}${
+        group && `&group=${group}`
+      }`;
 
       setAllFilter(filterQuery);
     } else {
@@ -96,16 +104,19 @@ function FilterCompo({
       chapter ||
       rollNo ||
       phoneNo ||
-      publishStatus
+      publishStatus ||
+      group
     ) {
+      console.log(group, "jjj");
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
         subject && `&subject=${subject}`
       }${chapter && `&chapter=${chapter}`}${rollNo && `&roll_no=${rollNo}`}${
         phoneNo && `&phone_no=${phoneNo}`
       }${startDate && `&start_date=${startDate}`}${
         endDate && `&end_date=${endDate}`
-      }${publishStatus && `&publish_status=${publishStatus}`}`;
-
+      }${publishStatus && `&publish_status=${publishStatus}`}${
+        group && `&group=${group}`
+      }`;
       setAllFilter(filterQuery);
     } else {
       setAllFilter("");
@@ -116,14 +127,32 @@ function FilterCompo({
     useLazyGetExamTypeForDropDownQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await examTypeTrigger();
-    };
-    fetch();
+    if (filterExamType) {
+      const fetch = async () => {
+        await examTypeTrigger();
+      };
+      fetch();
+    }
   }, []);
 
   const examTypeData = examTypeResult?.data?.map((examType) => {
     return { type: examType.examType, id: examType.examTypeId };
+  });
+
+  // ALL GROUP DROP DOWN
+  const [groupTrigger, groupResult] = useLazyGetAllGroupsForDropDownQuery();
+
+  useEffect(() => {
+    if (filterGroup) {
+      const fetch = async () => {
+        await groupTrigger();
+      };
+      fetch();
+    }
+  }, []);
+
+  const groupDropDown = groupResult?.data?.map((item) => {
+    return { id: item.groupId, type: item.groupName };
   });
 
   // SUBJECT DROPDOWN API
@@ -131,10 +160,12 @@ function FilterCompo({
     useLazyGetAllSubjectsForDropDownQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await subjectTrigger();
-    };
-    fetch();
+    if (filterSubject) {
+      const fetch = async () => {
+        await subjectTrigger();
+      };
+      fetch();
+    }
   }, []);
 
   const prpareSubjectDropDown = subjectResult?.data?.map((item) => {
@@ -148,10 +179,12 @@ function FilterCompo({
     useLazyGetAllChapterForDropDownQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await cahpterTrigger();
-    };
-    fetch();
+    if (filterChapter) {
+      const fetch = async () => {
+        await cahpterTrigger();
+      };
+      fetch();
+    }
   }, []);
 
   const prparechapterDropDown = chapterResult?.data?.map((item) => {
@@ -219,6 +252,29 @@ function FilterCompo({
                   >
                     <option value="">--Select--</option>
                     {examTypeData?.map((item) => (
+                      <option value={item.id} key={item.id}>
+                        {item.type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* GROUP TYPE  */}
+              {filterGroup && (
+                <div className="basis-1/4 text-appDarkBlue">
+                  <label htmlFor="group" className="block  font-semibold ml-1">
+                    Group:
+                  </label>
+                  <select
+                    name="group"
+                    id="group"
+                    className="mt-1 px-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                    value={group}
+                    onChange={(event) => setGroup(event.target.value)}
+                  >
+                    <option value="">--Select--</option>
+                    {groupDropDown?.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.type}
                       </option>

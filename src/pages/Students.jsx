@@ -49,6 +49,7 @@ function Students() {
       studentName: item.studentName,
       examType: item.enrolledExamType.examType,
       phoneNo: item.phoneNo,
+      group: item?.group?.groupName ? item.group.groupName : "No group",
       createdAt: item.createdAt,
     };
   });
@@ -56,6 +57,7 @@ function Students() {
   const tableTitle = [
     { title: "Roll No.", keyName: "rollNo" },
     { title: "Student Name", keyName: "studentName" },
+    { title: "Group", keyName: "group" },
     { title: "Enrolled exam", keyName: "examType" },
     { title: "Phone No.", keyName: "phoneNo" },
     { title: "Created at", keyName: "createdAt", isDate: true },

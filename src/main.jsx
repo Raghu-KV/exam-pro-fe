@@ -32,6 +32,9 @@ import ViewTest from "./pages/ViewTest.jsx";
 import PrepareQuestions from "./pages/PrepareQuestions.jsx";
 import ViewSubject from "./pages/ViewSubject.jsx";
 import ViewChapter from "./pages/ViewChapter.jsx";
+import Group from "./pages/Group.jsx";
+import AddGroup from "./pages/AddGroup.jsx";
+import EditGroup from "./pages/EditGroup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +78,19 @@ const router = createBrowserRouter([
       {
         path: "exam-types/edit/:id",
         element: <EditExamType />,
+      },
+      // GROUPS
+      {
+        path: "groups",
+        element: <Group />,
+      },
+      {
+        path: "groups/add-group",
+        element: <AddGroup />,
+      },
+      {
+        path: "groups/edit/:id",
+        element: <EditGroup />,
       },
       // SUBJECTS
       {
