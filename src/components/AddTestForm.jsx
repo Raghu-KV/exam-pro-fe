@@ -8,6 +8,7 @@ import {
 } from "../redux/requests/testTypesRequest";
 
 import toast, { Toaster } from "react-hot-toast";
+import Select from "react-select";
 
 function AddTestForm({ data, isLoading, isFetching }) {
   const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
@@ -37,6 +38,36 @@ function AddTestForm({ data, isLoading, isFetching }) {
   }, [formikRef, data, isLoading, isFetching]);
 
   //   console.log(formikRef.current);
+
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? "rgba(59, 130, 246, 0.1)" : "white", // Tailwind bg-blue-100
+      color: state.isFocused ? "rgb(29, 78, 216)" : "rgb(55, 65, 81)", // Tailwind text-blue-800
+      padding: "0.5rem", // Tailwind p-2
+    }),
+    menu: (provided) => ({
+      ...provided,
+      marginTop: "0.25rem", // Tailwind mt-1
+      // cursor: "pointer",
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: "rgb(151 163 182)", // Tailwind border-gray-300
+      borderRadius: "0.75rem", // Tailwind rounded-md
+      boxShadow: "0 1px 2px rgba(0,0,0,0.05)", // Tailwind shadow-sm
+      padding: "0.3rem 0.5rem",
+      ":hover": {
+        backgroundColor: "transparent", // No color change on hover
+      },
+    }),
+  };
 
   if (result.isLoading || isLoading) {
     return <h1>Loading...</h1>;
@@ -79,59 +110,83 @@ function AddTestForm({ data, isLoading, isFetching }) {
           }
         }}
       >
-        <Form className="flex flex-col gap-3 w-2/3">
-          <div className="flex flex-col">
-            <label htmlFor="testName" className="font-semibold ml-1">
-              Test name *
-            </label>
-            <Field
-              type="string"
-              id="testName"
-              name="testName"
-              className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
-              placeholder="Test name"
-            />
-            <ErrorMessage name="testName">
-              {(errorMessage) => (
-                <p className="text-red-500 mr-1">{errorMessage}</p>
-              )}
-            </ErrorMessage>
-          </div>
+        {(formik) => {
+          console.log(formik, "FORMSSSS");
 
-          <div className="flex flex-col">
-            <label htmlFor="examType" className="font-semibold ml-1">
-              Exam type *
-            </label>
-            <Field
-              as="select"
-              id="examType"
-              name="examTypeId"
-              className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
-              placeholder="Exam type"
-              multiple={false}
-            >
-              <option value="">-Select exam type-</option>
-              {examTypes?.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Field>
-            <ErrorMessage name="examTypeId">
-              {(errorMessage) => (
-                <p className="text-red-500 mr-1">{errorMessage}</p>
-              )}
-            </ErrorMessage>
-          </div>
+          return (
+            <Form className="flex flex-col gap-3 w-2/3">
+              <div className="flex flex-col">
+                <label htmlFor="testName" className="font-semibold ml-1">
+                  Test name *
+                </label>
+                <Field
+                  type="string"
+                  id="testName"
+                  name="testName"
+                  className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                  placeholder="Test name"
+                />
+                <ErrorMessage name="testName">
+                  {(errorMessage) => (
+                    <p className="text-red-500 mr-1">{errorMessage}</p>
+                  )}
+                </ErrorMessage>
+              </div>
 
-          <button
-            className="w-full bg-appGreen text-white px-2 py-3 rounded-xl hover:scale-105 duration-200"
-            type="submit"
-            disabled={addTestLoading || updateTestLoading}
-          >
-            {addTestLoading || updateTestLoading ? "Loading..." : "Submit"}
-          </button>
-        </Form>
+              <div className="flex flex-col">
+                <label htmlFor="examType" className="font-semibold ml-1">
+                  Exam type *
+                </label>
+                <Field
+                  as="select"
+                  id="examType"
+                  name="examTypeId"
+                  className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                  placeholder="Exam type"
+                  multiple={false}
+                >
+                  <option value="">-Select exam type-</option>
+                  {examTypes?.map((item) => (
+                    <option value={item.id} key={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage name="examTypeId">
+                  {(errorMessage) => (
+                    <p className="text-red-500 mr-1">{errorMessage}</p>
+                  )}
+                </ErrorMessage>
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="examType" className="font-semibold ml-1">
+                  Group *
+                </label>
+                <Select
+                  isMulti
+                  name="colors"
+                  options={options}
+                  styles={customStyles}
+                  // className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                />
+                <ErrorMessage name="examTypeId">
+                  {(errorMessage) => (
+                    <p className="text-red-500 mr-1">{errorMessage}</p>
+                  )}
+                </ErrorMessage>
+              </div>
+
+              <button
+                className="w-full bg-appGreen text-white px-2 py-3 rounded-xl hover:scale-105 duration-200"
+                type="submit"
+                disabled={addTestLoading || updateTestLoading}
+              >
+                {addTestLoading || updateTestLoading ? "Loading..." : "Submit"}
+              </button>
+            </Form>
+          );
+        }}
       </Formik>
     </div>
   );
