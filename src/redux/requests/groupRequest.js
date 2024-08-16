@@ -27,7 +27,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
     }),
 
     addGroup: builder.mutation({
-      query: (values) => ({
+      query: ({ values }) => ({
         url: `/groups`,
         method: "POST",
         body: values,

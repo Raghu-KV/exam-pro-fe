@@ -61,6 +61,12 @@ function ViewTest() {
             <p className="font-bold text-4xl text-appDarkBlue">
               {data?.testName}
             </p>
+            <p className="font-semibold text-appGray mt-4">Groups:</p>
+            {data?.group.map((item) => (
+              <p className="font-bold text-appDarkBlue inline-block px-2 border-r border-appLightGray">
+                {item?.groupName}
+              </p>
+            ))}
           </div>
 
           <div>

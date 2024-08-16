@@ -102,6 +102,7 @@ function Students() {
         filterDate={true}
         // filterSubject={true}
         // filterChapter={true}
+        filterGroup={true}
         filterPhoneNumber={true}
         filterRollNumber={true}
         setCurrentPage={setCurrentPage}

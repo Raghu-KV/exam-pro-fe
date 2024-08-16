@@ -6,9 +6,11 @@ import {
   useAddTestMutation,
   useUpdateTestMutation,
 } from "../redux/requests/testTypesRequest";
+import { useLazyGetAllGroupsForDropDownQuery } from "../redux/requests/groupRequest";
 
 import toast, { Toaster } from "react-hot-toast";
 import Select from "react-select";
+import SelectMultipleDropDown from "./SelectMultipleDropDown";
 
 function AddTestForm({ data, isLoading, isFetching }) {
   const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
@@ -24,6 +26,25 @@ function AddTestForm({ data, isLoading, isFetching }) {
     return { name: examType.examType, id: examType.examTypeId };
   });
 
+  const [invoke, responce] = useLazyGetAllGroupsForDropDownQuery();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await invoke();
+    };
+    fetch();
+  }, []);
+
+  const options = responce?.data?.map((groupType) => {
+    return { value: groupType.groupId, label: groupType.groupName };
+  });
+
+  // const options = [
+  //   { value: "chocolate", label: "Chocolate" },
+  //   { value: "strawberry", label: "Strawberry" },
+  //   { value: "vanilla", label: "Vanilla" },
+  // ];
+
   const formikRef = useRef();
 
   const [addTest, { isLoading: addTestLoading }] = useAddTestMutation();
@@ -34,16 +55,11 @@ function AddTestForm({ data, isLoading, isFetching }) {
     if (data) {
       formikRef?.current?.setFieldValue("testName", data.testName);
       formikRef?.current?.setFieldValue("examTypeId", data.examTypeId);
+      formikRef?.current?.setFieldValue("groupsId", data.groupsId);
     }
   }, [formikRef, data, isLoading, isFetching]);
 
   //   console.log(formikRef.current);
-
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
 
   const customStyles = {
     option: (provided, state) => ({
@@ -81,11 +97,17 @@ function AddTestForm({ data, isLoading, isFetching }) {
         initialValues={{
           testName: "",
           examTypeId: "",
+          groupsId: [],
         }}
         validationSchema={yup.object({
           testName: yup.string().required("Test Name is required"),
 
           examTypeId: yup.string().required("Exam Type is required"),
+          groupsId: yup
+            .array()
+            .of(yup.string())
+            .min(1, "Any one group must be selected")
+            .required("Group is required"),
         })}
         onSubmit={async (values) => {
           if (data) {
@@ -165,12 +187,32 @@ function AddTestForm({ data, isLoading, isFetching }) {
                 </label>
                 <Select
                   isMulti
-                  name="colors"
+                  name="groupsId"
                   options={options}
                   styles={customStyles}
-                  // className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                  value={
+                    options
+                      ? options.filter((option) =>
+                          formik.values.groupsId.includes(option.value)
+                        )
+                      : ""
+                  }
+                  onChange={(option) => {
+                    console.log(option);
+                    formik.setFieldValue(
+                      "groupsId",
+                      option.map((opt) => opt.value)
+                    );
+                  }}
                 />
-                <ErrorMessage name="examTypeId">
+
+                {/* <SelectMultipleDropDown
+                  isMulti
+                  name="groupId"
+                  options={options}
+                  styles={customStyles}
+                /> */}
+                <ErrorMessage name="groupsId">
                   {(errorMessage) => (
                     <p className="text-red-500 mr-1">{errorMessage}</p>
                   )}
