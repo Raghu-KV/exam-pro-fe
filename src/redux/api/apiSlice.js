@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:8080",
+  baseUrl: "https://exam-pro-be.vercel.app",
+  // baseUrl: "http://localhost:8080",
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("auth-token");
