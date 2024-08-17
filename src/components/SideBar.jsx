@@ -61,9 +61,9 @@ const navMenu = [
     link: "/auth/questions",
   },
   {
-    title: "Announcements",
+    title: "Info Center",
     icon: <MdNotifications size={25} />,
-    link: "/auth/Announcements",
+    link: "/auth/info-center",
   },
   {
     title: "Settings",
@@ -93,7 +93,7 @@ function SideBar() {
         <div
           className={`flex items-center  border-b-2 pb-2 ${
             navState.value ? `justify-between` : `justify-center`
-          }`}
+          } `}
         >
           {navState.value && <p>LOGO</p>}
           <MdMenu
@@ -102,7 +102,7 @@ function SideBar() {
             onClick={() => handleCloseNav()}
           />
         </div>
-        <div className="flex flex-col mt-7 gap-2">
+        <div className="flex flex-col mt-7 gap-2 ">
           {navMenu.map((navItem) => (
             <NavLink
               key={navItem.link}

@@ -35,6 +35,10 @@ import ViewChapter from "./pages/ViewChapter.jsx";
 import Group from "./pages/Group.jsx";
 import AddGroup from "./pages/AddGroup.jsx";
 import EditGroup from "./pages/EditGroup.jsx";
+import InfoCenter from "./pages/InfoCenter.jsx";
+import EditInfo from "./pages/EditInfo.jsx";
+import AddInfo from "./pages/AddInfo.jsx";
+import ViewInfo from "./pages/ViewInfo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -164,6 +168,23 @@ const router = createBrowserRouter([
       {
         path: "questions/edit/:id",
         element: <EditQuestion />,
+      },
+      // INFO CENTER
+      {
+        path: "info-center",
+        element: <InfoCenter />,
+      },
+      {
+        path: "info-center/view/:id",
+        element: <ViewInfo />,
+      },
+      {
+        path: "info-center/edit/:id",
+        element: <EditInfo />,
+      },
+      {
+        path: "info-center/add-info",
+        element: <AddInfo />,
       },
 
       {
