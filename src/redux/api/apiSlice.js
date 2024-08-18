@@ -52,10 +52,12 @@ export const apiSlice = createApi({
   // }),
   baseQuery: baseQueryWithReauth,
   tagTypes: [
+    "dashboard",
     "exam-type",
     "exam-type-single",
     "students",
     "single-student",
+    "student-detail-view",
     "subjetcts",
     "single-subject",
     "chapters",

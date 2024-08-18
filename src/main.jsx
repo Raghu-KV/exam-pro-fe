@@ -39,6 +39,8 @@ import InfoCenter from "./pages/InfoCenter.jsx";
 import EditInfo from "./pages/EditInfo.jsx";
 import AddInfo from "./pages/AddInfo.jsx";
 import ViewInfo from "./pages/ViewInfo.jsx";
+import ViewStudent from "./pages/ViewStudent.jsx";
+import ViewStudentTestInsight from "./pages/ViewStudentTestInsight.jsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
       {
         path: "students/edit/:id",
         element: <EditStudent />,
+      },
+      {
+        path: "students/view/:id",
+        element: <ViewStudent />,
+      },
+      {
+        path: "students/view/:id/insight/:testId",
+        element: <ViewStudentTestInsight />,
       },
       // EXAM TYPES
       {

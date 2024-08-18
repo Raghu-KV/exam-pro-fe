@@ -21,6 +21,7 @@ function FilterCompo({
   setCurrentPage,
   filterPublish,
   filterGroup,
+  answerFilter,
 }) {
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -34,6 +35,7 @@ function FilterCompo({
   const [rollNo, setRollNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [publishStatus, setPublishStatus] = useState("");
+  const [isCorrect, setIsCorrect] = useState("");
 
   //   const [allFilter, setAllFilter] = useState("");
   //   const [searchItem, setSearchItem] = useState("");
@@ -48,6 +50,7 @@ function FilterCompo({
     setPhoneNo("");
     setPublishStatus("");
     setGroup("");
+    setIsCorrect("");
   };
 
   const handleApplyFilter = () => {
@@ -61,7 +64,8 @@ function FilterCompo({
       rollNo ||
       phoneNo ||
       publishStatus ||
-      group
+      group ||
+      isCorrect
     ) {
       console.log(group, "jjj");
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
@@ -72,7 +76,7 @@ function FilterCompo({
         endDate && `&end_date=${endDate}`
       }${publishStatus && `&publish_status=${publishStatus}`}${
         group && `&group=${group}`
-      }`;
+      }${isCorrect && `&isCorrect=${isCorrect}`}`;
 
       setAllFilter(filterQuery);
     } else {
@@ -105,7 +109,8 @@ function FilterCompo({
       rollNo ||
       phoneNo ||
       publishStatus ||
-      group
+      group ||
+      isCorrect
     ) {
       console.log(group, "jjj");
       const filterQuery = `&filter=true${examType && `&exam_type=${examType}`}${
@@ -116,7 +121,7 @@ function FilterCompo({
         endDate && `&end_date=${endDate}`
       }${publishStatus && `&publish_status=${publishStatus}`}${
         group && `&group=${group}`
-      }`;
+      }${isCorrect && `&isCorrect=${isCorrect}`}`;
       setAllFilter(filterQuery);
     } else {
       setAllFilter("");
@@ -279,6 +284,29 @@ function FilterCompo({
                         {item.type}
                       </option>
                     ))}
+                  </select>
+                </div>
+              )}
+
+              {/* ANSWER STATUS  */}
+              {answerFilter && (
+                <div className="basis-full px-2 text-appDarkBlue lg:basis-1/4">
+                  <label
+                    htmlFor="exam-type"
+                    className="block  font-semibold ml-1"
+                  >
+                    Answer Status:
+                  </label>
+                  <select
+                    name="exam-type"
+                    id="exam-type"
+                    className="mt-1 px-1 py-2 border  border-appGray w-full rounded-lg focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                    value={isCorrect}
+                    onChange={(event) => setIsCorrect(event.target.value)}
+                  >
+                    <option value="">--Select--</option>
+                    <option value="yes">Correct aswer</option>
+                    <option value="no">Incorrect aswer</option>
                   </select>
                 </div>
               )}

@@ -14,6 +14,26 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: ["single-student"],
     }),
 
+    getStudentDetailView: builder.query({
+      query: (id) => `/students/view/${id}`,
+      providesTags: ["student-detail-view"],
+    }),
+
+    getStudentCompletedTests: builder.query({
+      query: ({ id, filterOptions }) =>
+        `/students/completedTests/${id}${filterOptions}`,
+    }),
+
+    getStudentIncompleteTests: builder.query({
+      query: ({ id, filterOptions }) =>
+        `/students/incompleteTests/${id}${filterOptions}`,
+    }),
+
+    getStudentCompletedTestInsight: builder.query({
+      query: ({ id, testId, filterOptions }) =>
+        `/students/completedTests/${id}/insight/${testId}${filterOptions}`,
+    }),
+
     addStudent: builder.mutation({
       query: (values) => ({
         url: `/students`,
@@ -21,6 +41,13 @@ const extendedApiSlice = apiSlice.injectEndpoints({
         body: values,
       }),
       invalidatesTags: ["students"],
+    }),
+
+    resetPassword: builder.mutation({
+      query: (id) => ({
+        url: `/students/resetPassword/${id}`,
+        method: "PATCH",
+      }),
     }),
 
     editStudent: builder.mutation({
@@ -44,6 +71,11 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLazyGetAllStudentsQuery,
+  useLazyGetStudentIncompleteTestsQuery,
+  useLazyGetStudentCompletedTestsQuery,
+  useLazyGetStudentCompletedTestInsightQuery,
+  useGetStudentDetailViewQuery,
+  useResetPasswordMutation,
   useAddStudentMutation,
   useGetStudentByIdQuery,
   useEditStudentMutation,
