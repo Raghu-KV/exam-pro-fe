@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import {
   MdInfo,
   MdCreate,
@@ -21,9 +21,13 @@ function TableCompo({
   isLoading,
   isError,
   isActions = true,
+  isInsightActions = false,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // FOR INSIGHT ONLY
+  const { id: testId } = useParams();
 
   const currentLoaction = location.pathname.split("/")[2];
 
@@ -62,6 +66,12 @@ function TableCompo({
               </th>
             ))}
             {isActions && (
+              <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
+                Actions
+              </th>
+            )}
+
+            {isInsightActions && (
               <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
                 Actions
               </th>
@@ -116,6 +126,23 @@ function TableCompo({
                       onClick={() => handleDeleteItem(item._id)}
                     >
                       <MdDelete size={25} />
+                    </p>
+                  </div>
+                </td>
+              )}
+
+              {isInsightActions && (
+                <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
+                  <div className="flex items-center justify-center">
+                    <p
+                      className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
+                      onClick={() =>
+                        navigate(
+                          `/auth/students/view/${item._id}/insight/${testId}`
+                        )
+                      }
+                    >
+                      <MdInfo size={25} />
                     </p>
                   </div>
                 </td>

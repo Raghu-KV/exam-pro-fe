@@ -40,7 +40,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: values,
       }),
-      invalidatesTags: ["students"],
+      invalidatesTags: ["students", "dashboard"],
     }),
 
     resetPassword: builder.mutation({
@@ -56,7 +56,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: values,
       }),
-      invalidatesTags: ["students", "single-student"],
+      invalidatesTags: ["students", "single-student", "dashboard"],
     }),
 
     deleteStudent: builder.mutation({

@@ -4,9 +4,14 @@ import { jwtDecode } from "jwt-decode";
 import { useGetDashboardQuery } from "../redux/requests/dashboardRequest";
 import SquareCardCompo from "../components/SquareCardCompo";
 import BarChartCompo from "../components/BarChartCompo";
+import { frontEndUrl } from "../URL";
 
 function Dashboard() {
   const token = localStorage.getItem("auth-token");
+
+  if (!token) {
+    window.location.href = frontEndUrl;
+  }
   const decoded = jwtDecode(token);
 
   const { data, isLoading, isError, error } = useGetDashboardQuery();
@@ -44,12 +49,8 @@ function Dashboard() {
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center gap-0 mt-5">
-          {data?.insightData.map((data) => (
-            <div className="basis-2/4 h-[40vh] w-full" key={data._id}>
-              <BarChartCompo data={[data]} />
-            </div>
-          ))}
+        <div className="basis-2/4 h-[60vh] w-full" key={data._id}>
+          <BarChartCompo data={data?.insightData} />
         </div>
       </div>
     </div>

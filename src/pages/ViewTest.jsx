@@ -14,6 +14,8 @@ import { MdOutlineQuestionMark, MdBallot } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useChagePublishMutation } from "../redux/requests/testTypesRequest";
 import toast, { Toaster } from "react-hot-toast";
+import ViewCompletedStudents from "../components/ViewCompletedStudents";
+import ViewIncompleteStudents from "../components/ViewIncompleteStudents";
 
 function ViewTest() {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ function ViewTest() {
   const { data, isLoading } = useGetSingleTestQuery(id);
 
   const [openQuestions, setOpenQuestions] = useState(false);
+  const [openCompletedStudents, setOpenCompletedStudents] = useState(false);
+  const [openIncompleteStudents, setOpenIncompleteStudents] = useState(false);
 
   const [changePublish, { isLoading: changePublishLoading }] =
     useChagePublishMutation();
@@ -40,10 +44,7 @@ function ViewTest() {
   // const { data: allQues } = useGetAllQuestionNoPagenationQuery(id);
 
   const handlePrepareQuestion = async () => {
-    navigate(`/auth/test-types/prepare-questions/${id}`, {
-      state: { from: "/" },
-      replace: true,
-    });
+    navigate(`/auth/test-types/prepare-questions/${id}`);
   };
 
   if (isLoading) {
@@ -120,7 +121,10 @@ function ViewTest() {
                   </div>
                 </div>
               </div>
-              <div className="bg-gradient-to-tr from-gray-100 to-gray-200 border border-appDarkBlue w-full text-appDarkBlue p-1 px-5 rounded-b-xl">
+              <div
+                className="bg-gradient-to-tr from-gray-100 to-gray-200 border border-appDarkBlue w-full text-appDarkBlue p-1 px-5 
+              rounded-b-xl"
+              >
                 Total Questions
               </div>
             </div>
@@ -146,14 +150,65 @@ function ViewTest() {
           {openQuestions && <ViewQuestionComp />}
         </div>
 
+        <div className="mt-10">
+          {/* Completed Students */}
+          <div className="pb-2 border-b border-appDarkBlue flex justify-between items-center">
+            <h2 className="font-bold text-2xl text-appDarkBlue ">
+              Completed Students
+            </h2>
+            <div
+              className=" rotate-2 bg-appLightGray/40 rounded-full p-1 hover:bg-appLightGray/60 duration-200 mr-4 cursor-pointer"
+              onClick={() => setOpenCompletedStudents((prev) => !prev)}
+            >
+              {openCompletedStudents ? (
+                <MdExpandLess size={30} />
+              ) : (
+                <MdExpandMore size={30} />
+              )}
+            </div>
+          </div>
+          {openCompletedStudents && <ViewCompletedStudents />}
+        </div>
+
+        {/* {data?.attendedStudentsId?.length !== data?.totalStudents && ( */}
+        <div className="mt-10">
+          {/* Incompleted Students */}
+          <div className="pb-2 border-b border-appDarkBlue flex justify-between items-center">
+            <h2 className="font-bold text-2xl text-appDarkBlue ">
+              Incomplet Students
+            </h2>
+            <div
+              className=" rotate-2 bg-appLightGray/40 rounded-full p-1 hover:bg-appLightGray/60 duration-200 mr-4 cursor-pointer"
+              onClick={() => setOpenIncompleteStudents((prev) => !prev)}
+            >
+              {openIncompleteStudents ? (
+                <MdExpandLess size={30} />
+              ) : (
+                <MdExpandMore size={30} />
+              )}
+            </div>
+          </div>
+          {openIncompleteStudents && <ViewIncompleteStudents />}
+        </div>
+        {/* )} */}
+
+        {data?.attendedStudentsId?.length === data?.totalStudents && (
+          <div className="w-full bg-appGreen rounded-xl mt-4">
+            <p className="font-semibold p-4 text-white ">
+              Every student has completed the test
+            </p>
+          </div>
+        )}
         <div className="mt-5 flex gap-5">
-          <button
-            className="px-3 py-2 rounded-lg font-semibold text-appDarkBlue hover:bg-appDarkBlue/20 duration-300 flex items-center gap-1"
-            onClick={() => handlePrepareQuestion()}
-          >
-            <MdOutlineQuestionMark size={20} />
-            <p>Prepare Questions</p>
-          </button>
+          {!data?.attendedStudentsId?.length && (
+            <button
+              className="px-3 py-2 rounded-lg font-semibold text-appDarkBlue hover:bg-appDarkBlue/20 duration-300 flex items-center gap-1"
+              onClick={() => handlePrepareQuestion()}
+            >
+              <MdOutlineQuestionMark size={20} />
+              <p>Prepare Questions</p>
+            </button>
+          )}
 
           <button
             className={`px-3 py-2 ${

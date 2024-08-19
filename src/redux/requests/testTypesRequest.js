@@ -18,6 +18,15 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       },
     }),
 
+    getAllIncompleteStudents: builder.query({
+      query: ({ id, filterOptions }) =>
+        `/tests/${id}/getIncompleteStudents${filterOptions}`,
+    }),
+
+    getAllCompletedStudents: builder.query({
+      query: ({ id, filterOptions }) =>
+        `/tests/${id}/getCompletedStudents${filterOptions}`,
+    }),
     getTestPrefill: builder.query({
       query: (id) => `/tests/${id}/prefill`,
       providesTags: ["single-test"],
@@ -98,6 +107,8 @@ export const {
   useLazyGetAllTestsQuery,
   useLazyGetAllQuestionsForTestQuery,
   useLazyGetAllQuestionNoPagenationQuery,
+  useLazyGetAllCompletedStudentsQuery,
+  useLazyGetAllIncompleteStudentsQuery,
   useGetTestPrefillQuery,
   useGetSingleTestQuery,
   useAddTestMutation,

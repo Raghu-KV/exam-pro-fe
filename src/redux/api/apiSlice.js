@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { backEndUrl, frontEndUrl } from "../../URL";
 
 const baseQuery = fetchBaseQuery({
   // baseUrl: "https://exam-pro-be.vercel.app",
-  baseUrl: "http://localhost:8080",
+  baseUrl: backEndUrl,
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("auth-token");
@@ -37,7 +38,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           extraOptions
         );
         localStorage.clear();
-        window.location.href = "http://localhost:3000";
+        window.location.href = frontEndUrl;
       }
       return refershResult;
     }
