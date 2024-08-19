@@ -42,6 +42,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       }
       return refershResult;
     }
+  } else if (result?.error?.status === 402) {
+    window.location.href = `${frontEndUrl}/paymentRequired`;
   }
   return result;
 };

@@ -41,11 +41,16 @@ import AddInfo from "./pages/AddInfo.jsx";
 import ViewInfo from "./pages/ViewInfo.jsx";
 import ViewStudent from "./pages/ViewStudent.jsx";
 import ViewStudentTestInsight from "./pages/ViewStudentTestInsight.jsx";
+import PaymentRequired from "./pages/PaymentRequired.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/paymentRequired",
+    element: <PaymentRequired />,
   },
   {
     path: "/auth",
