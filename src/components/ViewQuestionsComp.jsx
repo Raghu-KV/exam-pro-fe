@@ -12,6 +12,7 @@ import {
 import { useParams } from "react-router-dom";
 
 import { useLazyGetAllQuestionsForTestQuery } from "../redux/requests/testTypesRequest";
+import LoadingCompo from "./LoadingCompo";
 
 function ViewQuestionComp() {
   const [question, setQuestion] = useState("");
@@ -37,7 +38,7 @@ function ViewQuestionComp() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllQuestionsForTestQuery();
 
   useEffect(() => {
@@ -91,6 +92,7 @@ function ViewQuestionComp() {
 
   return (
     <div className="w-full border-b pb-1 border-appDarkBlue">
+      {isFetching && <LoadingCompo />}
       <Toaster />
 
       <FilterCompo

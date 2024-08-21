@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLazyGetSingleChapterViewQuery } from "../redux/requests/chapterRequest";
 import { useParams } from "react-router-dom";
 import { MdArrowBackIos, MdArrowForwardIos, MdAdd } from "react-icons/md";
+import LoadingCompo from "../components/LoadingCompo";
 
 function ViewChapter() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ function ViewChapter() {
     setPaginationParams(`?page=${currentPage}`);
   }, [currentPage]);
 
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetSingleChapterViewQuery();
 
   useEffect(() => {
@@ -49,11 +50,12 @@ function ViewChapter() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (
     <div className="w-full font-appDarkBlue">
+      {isFetching && <LoadingCompo />}
       <PageHeaderComp heading={"View chapter"} />
 
       <div className="bg-gradient-to-tr from-appGreen/80 to-appGreen p-4 w-1/3 rounded-xl text-white ml-4 mt-4">
@@ -68,21 +70,21 @@ function ViewChapter() {
         <p className=" text-appDarkBlue font-bold">{`Questions in ${data?.chapterDoc?.chapterName}`}</p>
       </div>
 
+      <FilterCompo
+        setSearchItem={setSubjectName}
+        setAllFilter={setAllFilter}
+        // isFilter={true}
+        // filterExamType={true}
+        // filterDate={true}
+        setCurrentPage={setCurrentPage}
+        // // filterSubject={true}
+        // // filterChapter={true}
+        // filterPhoneNumber={true}
+        // filterRollNumber={true}
+      />
+
       {data?.docs?.length ? (
         <div className="px-4 pb-6">
-          <FilterCompo
-            setSearchItem={setSubjectName}
-            setAllFilter={setAllFilter}
-            // isFilter={true}
-            // filterExamType={true}
-            // filterDate={true}
-            setCurrentPage={setCurrentPage}
-            // // filterSubject={true}
-            // // filterChapter={true}
-            // filterPhoneNumber={true}
-            // filterRollNumber={true}
-          />
-
           {data?.docs?.map((item) => (
             <div className="px-4 border border-appDarkBlue rounded-lg mb-3 mx-4 py-2">
               <p className="p-1 font-semibold">{item.question}</p>

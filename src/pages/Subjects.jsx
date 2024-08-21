@@ -33,7 +33,7 @@ function Subjects() {
   }, [currentPage]);
 
   //  API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllSubjectsQuery();
 
   useEffect(() => {
@@ -109,6 +109,7 @@ function Subjects() {
         handleDeleteItem={handleDeleteItem}
         isLoading={isLoading}
         isError={isError}
+        isFetching={isFetching}
       />
     </div>
   );

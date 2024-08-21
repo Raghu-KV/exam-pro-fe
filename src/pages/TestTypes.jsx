@@ -31,7 +31,7 @@ function TestTypes() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllTestsQuery();
 
   useEffect(() => {
@@ -123,6 +123,9 @@ function TestTypes() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isError={isError}
+        isLoading={isLoading}
+        isFetching={isFetching}
       />
     </div>
   );

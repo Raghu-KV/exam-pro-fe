@@ -32,7 +32,7 @@ function Students() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllStudentsQuery();
 
   useEffect(() => {
@@ -115,6 +115,7 @@ function Students() {
         handleDeleteItem={handleDeleteItem}
         isLoading={isLoading}
         isError={isError}
+        isFetching={isFetching}
       />
     </div>
   );

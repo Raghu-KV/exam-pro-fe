@@ -31,7 +31,7 @@ function ExamTypes() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetExamTypeQuery();
 
   useEffect(() => {
@@ -89,6 +89,7 @@ function ExamTypes() {
         tableData={data?.docs}
         isLoading={isLoading}
         isError={isError}
+        isFetching={isFetching}
         paginateOptions={data?.paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}

@@ -31,7 +31,7 @@ function InfoCenter() {
   }, [currentPage]);
 
   //  API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllInfosQuery();
 
   useEffect(() => {
@@ -107,6 +107,7 @@ function InfoCenter() {
         handleDeleteItem={handleDeleteItem}
         isLoading={isLoading}
         isError={isError}
+        isFetching={isFetching}
       />
     </div>
   );

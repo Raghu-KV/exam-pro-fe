@@ -103,6 +103,9 @@ function Group() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
       />
     </div>
   );

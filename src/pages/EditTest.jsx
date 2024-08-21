@@ -9,7 +9,6 @@ function EditTest() {
   const { id } = useParams();
   const { data, isLoading, isFetching, isError } = useGetTestPrefillQuery(id);
 
-  console.log(data, "llll");
   return (
     <div className="w-full">
       <PageHeaderComp heading={"Add Test"} />

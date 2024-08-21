@@ -16,6 +16,7 @@ import {
   MdArrowForwardIos,
   MdArrowBackIos,
 } from "react-icons/md";
+import LoadingCompo from "../components/LoadingCompo";
 
 function ViewStudentTestInsight() {
   const { id, testId } = useParams();
@@ -63,7 +64,7 @@ function ViewStudentTestInsight() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   if (isError && error) {
@@ -72,6 +73,7 @@ function ViewStudentTestInsight() {
 
   return (
     <div className="w-full px-4">
+      {isFetching && <LoadingCompo />}
       <PageHeaderComp heading={"View Question"} />
       <div>
         <h1 className="font-bold text-center mt-3 text-3xl">

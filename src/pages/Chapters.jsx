@@ -33,7 +33,7 @@ function Chapters() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllChaptersQuery();
 
   useEffect(() => {
@@ -108,6 +108,9 @@ function Chapters() {
         paginateOptions={paginateOptions}
         setCurrentPage={setCurrentPage}
         handleDeleteItem={handleDeleteItem}
+        isLoading={isLoading}
+        isError={isError}
+        isFetching={isFetching}
       />
     </div>
   );

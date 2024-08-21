@@ -5,6 +5,7 @@ import { useGetDashboardQuery } from "../redux/requests/dashboardRequest";
 import SquareCardCompo from "../components/SquareCardCompo";
 import BarChartCompo from "../components/BarChartCompo";
 import { frontEndUrl } from "../URL";
+import LoadingCompo from "../components/LoadingCompo";
 
 function Dashboard() {
   const token = localStorage.getItem("auth-token");
@@ -17,7 +18,7 @@ function Dashboard() {
   const { data, isLoading, isError, error } = useGetDashboardQuery();
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (

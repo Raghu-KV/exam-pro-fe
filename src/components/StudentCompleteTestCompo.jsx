@@ -4,6 +4,7 @@ import { useLazyGetStudentCompletedTestsQuery } from "../redux/requests/studentR
 import { MdArrowForwardIos, MdArrowBackIos } from "react-icons/md";
 import FilterCompo from "./FilterCompo";
 import SingleCard from "./SingleCard";
+import LoadingCompo from "./LoadingCompo";
 
 function StudentCompleteTestCompo() {
   const { id } = useParams();
@@ -50,7 +51,7 @@ function StudentCompleteTestCompo() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (

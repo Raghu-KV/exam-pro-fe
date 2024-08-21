@@ -16,6 +16,7 @@ import { useChagePublishMutation } from "../redux/requests/testTypesRequest";
 import toast, { Toaster } from "react-hot-toast";
 import ViewCompletedStudents from "../components/ViewCompletedStudents";
 import ViewIncompleteStudents from "../components/ViewIncompleteStudents";
+import LoadingCompo from "../components/LoadingCompo";
 
 function ViewTest() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function ViewTest() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (

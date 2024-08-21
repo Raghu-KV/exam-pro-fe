@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useLazyGetAllCompletedStudentsQuery } from "../redux/requests/testTypesRequest";
 import { useParams } from "react-router-dom";
+import LoadingCompo from "./LoadingCompo";
 function ViewCompletedStudents() {
   const [studentName, setStudentName] = useState("");
   const [allFilter, setAllFilter] = useState("");
@@ -30,7 +31,7 @@ function ViewCompletedStudents() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllCompletedStudentsQuery();
 
   useEffect(() => {
@@ -64,6 +65,7 @@ function ViewCompletedStudents() {
 
   return (
     <div className="w-full border-b pb-1 border-appDarkBlue">
+      {isFetching && <LoadingCompo />}
       <Toaster />
 
       <FilterCompo

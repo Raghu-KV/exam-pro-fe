@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLazyGetSingleSubjectViewQuery } from "../redux/requests/subjectsRequest";
 import { useParams } from "react-router-dom";
 import { MdArrowBackIos, MdArrowForwardIos, MdAdd } from "react-icons/md";
+import LoadingCompo from "../components/LoadingCompo";
 
 function ViewSubject() {
   const { id } = useParams();
@@ -30,7 +31,7 @@ function ViewSubject() {
   }, [currentPage]);
 
   //  API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetSingleSubjectViewQuery();
 
   useEffect(() => {
@@ -50,11 +51,12 @@ function ViewSubject() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (
     <div className="w-full font-appDarkBlue">
+      {isFetching && <LoadingCompo />}
       <PageHeaderComp heading={"View subject"} />
 
       <div className="bg-gradient-to-tr from-appGreen/80 to-appGreen p-4 w-1/3 rounded-xl text-white ml-4 mt-4">
@@ -69,21 +71,21 @@ function ViewSubject() {
         <p className=" text-appDarkBlue font-bold">{`Chapters in ${data?.subjectDoc?.subjectName}`}</p>
       </div>
 
+      <FilterCompo
+        setSearchItem={setSubjectName}
+        setAllFilter={setAllFilter}
+        // isFilter={true}
+        // filterExamType={true}
+        // filterDate={true}
+        setCurrentPage={setCurrentPage}
+        // // filterSubject={true}
+        // // filterChapter={true}
+        // filterPhoneNumber={true}
+        // filterRollNumber={true}
+      />
+
       {data?.docs?.length ? (
         <div className="px-4">
-          <FilterCompo
-            setSearchItem={setSubjectName}
-            setAllFilter={setAllFilter}
-            // isFilter={true}
-            // filterExamType={true}
-            // filterDate={true}
-            setCurrentPage={setCurrentPage}
-            // // filterSubject={true}
-            // // filterChapter={true}
-            // filterPhoneNumber={true}
-            // filterRollNumber={true}
-          />
-
           {data?.docs?.map((item) => (
             <div className="px-4 ">
               <p className="mt-1 p-2 border border-appDarkBlue rounded-lg">

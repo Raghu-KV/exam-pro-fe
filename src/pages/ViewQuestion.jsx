@@ -1,3 +1,4 @@
+import LoadingCompo from "../components/LoadingCompo";
 import PageHeaderComp from "../components/PageHeaderComp";
 import { useGetSingleQuestionQuery } from "../redux/requests/question.request";
 import { useParams } from "react-router-dom";
@@ -7,7 +8,7 @@ function ViewQuestion() {
   const { data, isLoading } = useGetSingleQuestionQuery(id);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   return (

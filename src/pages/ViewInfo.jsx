@@ -3,10 +3,16 @@ import { useGetSingleInfoQuery } from "../redux/requests/infoCenterRequest";
 import { useParams } from "react-router-dom";
 
 import moment from "moment";
+import LoadingCompo from "../components/LoadingCompo";
 
 function ViewInfo() {
   const { id } = useParams();
   const { data, isLoading, isFetching, isError } = useGetSingleInfoQuery(id);
+
+  if (isLoading) {
+    return <LoadingCompo />;
+  }
+
   return (
     <div className="w-full">
       <PageHeaderComp heading={"View Info"} />

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useLazyGetAllIncompleteStudentsQuery } from "../redux/requests/testTypesRequest";
 import { useParams } from "react-router-dom";
+import LoadingCompo from "./LoadingCompo";
 
 function ViewIncompleteStudents() {
   const [studentName, setStudentName] = useState("");
@@ -31,7 +32,7 @@ function ViewIncompleteStudents() {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllIncompleteStudentsQuery();
 
   useEffect(() => {
@@ -65,6 +66,7 @@ function ViewIncompleteStudents() {
 
   return (
     <div className="w-full border-b pb-1 border-appDarkBlue">
+      {isFetching && <LoadingCompo />}
       <Toaster />
 
       <FilterCompo

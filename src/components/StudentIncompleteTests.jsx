@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLazyGetStudentIncompleteTestsQuery } from "../redux/requests/studentRequest";
 import { MdArrowForwardIos, MdArrowBackIos } from "react-icons/md";
 import { useParams } from "react-router-dom";
+import LoadingCompo from "./LoadingCompo";
 
 function StudentIncompleteTests() {
   const { id } = useParams();
@@ -50,7 +51,7 @@ function StudentIncompleteTests() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
   return (
     <div className="font-inter mb-16 px-4">

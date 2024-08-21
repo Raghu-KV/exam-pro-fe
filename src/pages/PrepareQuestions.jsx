@@ -11,6 +11,7 @@ import SelectQuestions from "../components/SelectQuestions";
 import { useUpdateQuestionsMutation } from "../redux/requests/testTypesRequest";
 import { useBlocker } from "react-router-dom";
 import { useLazyGetAllQuestionNoPagenationQuery } from "../redux/requests/testTypesRequest";
+import LoadingCompo from "../components/LoadingCompo";
 
 function PrepareQuestions() {
   const { id } = useParams();
@@ -75,7 +76,7 @@ function PrepareQuestions() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingCompo />;
   }
 
   if (blocker.state === "blocked") {
