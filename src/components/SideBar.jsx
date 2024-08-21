@@ -95,7 +95,7 @@ function SideBar() {
             navState.value ? `justify-between` : `justify-center`
           } `}
         >
-          {navState.value && <p>LOGO</p>}
+          {navState.value && <img src="/logo.svg" alt="" className="w-32" />}
           <MdMenu
             size={25}
             className="cursor-pointer"
