@@ -53,7 +53,7 @@ function ExamTypes() {
     if (permission && permission.toLowerCase() == "y") {
       await deleteExamType(id).then((res) => {
         if (res.error) {
-          toast.error(`Error`);
+          toast.error(res.error.data.message);
         } else {
           toast.success("Successfully deleted examtype");
         }

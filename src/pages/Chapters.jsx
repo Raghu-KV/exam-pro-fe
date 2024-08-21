@@ -71,7 +71,7 @@ function Chapters() {
     if (permission && permission.toLowerCase() == "y") {
       await deleteChapter(id).then((res) => {
         if (res.error) {
-          toast.error(`Error`);
+          toast.error(res.error.data.message);
         } else {
           toast.success("Successfully deleted student");
         }

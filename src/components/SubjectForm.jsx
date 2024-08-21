@@ -62,7 +62,7 @@ function SubjectForm({ data, isLoading, isFetching }) {
             const editData = { id: data._id, values: values };
             await updateSubject(editData).then((res) => {
               if (res.error) {
-                toast.error("Error");
+                toast.error(res.error.data.message);
               } else {
                 toast.success("Updated exam type");
                 // navigate("/auth/exam-types");
@@ -72,7 +72,7 @@ function SubjectForm({ data, isLoading, isFetching }) {
             const addData = { values: values };
             await postSubject(addData.values).then((res) => {
               if (res.error) {
-                toast.error("Error");
+                toast.error(res.error.data.message);
               } else {
                 toast.success("Added exam type");
               }

@@ -169,7 +169,7 @@ function QuestionForm({ data, isLoading, isFetching }) {
             };
             await editQuestion(editData).then((res) => {
               if (res.error) {
-                toast.error("Error");
+                toast.error(res.error.data.message);
               } else {
                 toast.success("Updated exam type");
                 // navigate("/auth/exam-types");
@@ -179,7 +179,7 @@ function QuestionForm({ data, isLoading, isFetching }) {
             const addData = { ...values };
             await addQuestion(addData).then((res) => {
               if (res.error) {
-                toast.error("Error");
+                toast.error(res.error.data.message);
               } else {
                 toast.success("Edited question");
               }

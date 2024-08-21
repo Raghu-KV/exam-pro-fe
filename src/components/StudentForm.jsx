@@ -90,7 +90,7 @@ function StudentForm({ data, isLoading, isFetching }) {
               toast.success("Student added successfully");
             }
           } catch (error) {
-            toast.error("An error occurred");
+            toast.error(error.data.message);
           }
         }}
       >

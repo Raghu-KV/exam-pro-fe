@@ -73,7 +73,7 @@ function Questions() {
     if (permission && permission.toLowerCase() == "y") {
       await deleteQuestion(id).then((res) => {
         if (res.error) {
-          toast.error(`Error`);
+          toast.error(res.error.data.message);
         } else {
           toast.success("Successfully deleted student");
         }

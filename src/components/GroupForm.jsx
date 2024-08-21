@@ -58,7 +58,7 @@ function GroupForm({ data, isLoading, isFetching }) {
         toast.success("Group added successfully");
       }
     } catch (error) {
-      toast.error("Error occurred");
+      toast.error(error.data.message);
     }
   };
 
