@@ -50,7 +50,7 @@ function Dashboard() {
           ))}
         </div>
 
-        <div className="basis-2/4 h-[60vh] w-full" key={data._id}>
+        <div className="basis-2/4 h-[60vh] w-full" key={data?._id}>
           <BarChartCompo data={data?.insightData} />
         </div>
       </div>
