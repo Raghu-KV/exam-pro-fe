@@ -36,10 +36,12 @@ function SelectQuestions({ setChanged }) {
     useLazyGetAllQuestionQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await trigger(`${paginationParams}${queryParams}`).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger(`${paginationParams}${queryParams}`).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const paginateOptions = data?.paginateOptions;

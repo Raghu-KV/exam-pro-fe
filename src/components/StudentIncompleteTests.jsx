@@ -34,13 +34,15 @@ function StudentIncompleteTests() {
     useLazyGetStudentIncompleteTestsQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await trigger({
-        id: id,
-        filterOptions: `${paginationParams}${queryParams}`,
-      }).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger({
+          id: id,
+          filterOptions: `${paginationParams}${queryParams}`,
+        }).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const data = responce?.docs;

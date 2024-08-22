@@ -44,17 +44,17 @@ function ViewStudentTestInsight() {
   const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetStudentCompletedTestInsightQuery();
 
-  console.log(data, "HHHHH");
-
   useEffect(() => {
-    const fetch = async () => {
-      await trigger({
-        id: id,
-        testId: testId,
-        filterOptions: `${paginationParams}${queryParams}`,
-      }).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger({
+          id: id,
+          testId: testId,
+          filterOptions: `${paginationParams}${queryParams}`,
+        }).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const paginateOptions = data?.paginateOptions;

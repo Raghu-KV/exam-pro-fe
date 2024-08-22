@@ -42,13 +42,15 @@ function ViewQuestionComp() {
     useLazyGetAllQuestionsForTestQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await trigger({
-        id: id,
-        filterOptions: `${paginationParams}${queryParams}`,
-      }).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger({
+          id: id,
+          filterOptions: `${paginationParams}${queryParams}`,
+        }).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const prepareData = data?.docs.map((item) => {

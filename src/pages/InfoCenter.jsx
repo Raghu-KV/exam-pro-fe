@@ -35,10 +35,12 @@ function InfoCenter() {
     useLazyGetAllInfosQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await trigger(`${paginationParams}${queryParams}`).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger(`${paginationParams}${queryParams}`).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const prepareData = data?.docs.map((item) => {

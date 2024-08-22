@@ -34,13 +34,15 @@ function ViewChapter() {
     useLazyGetSingleChapterViewQuery();
 
   useEffect(() => {
-    const fetch = async () => {
-      await trigger({
-        id: id,
-        search: `${paginationParams}${queryParams}`,
-      }).unwrap();
-    };
-    fetch();
+    if (queryParams || paginationParams) {
+      const fetch = async () => {
+        await trigger({
+          id: id,
+          search: `${paginationParams}${queryParams}`,
+        }).unwrap();
+      };
+      fetch();
+    }
   }, [queryParams, paginationParams]);
 
   const paginateOptions = data?.paginateOptions;
