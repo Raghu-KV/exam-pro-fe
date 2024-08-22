@@ -132,13 +132,13 @@ function FilterCompo({
     useLazyGetExamTypeForDropDownQuery();
 
   useEffect(() => {
-    if (filterExamType) {
+    if (filterExamType && openFilter) {
       const fetch = async () => {
         await examTypeTrigger();
       };
       fetch();
     }
-  }, []);
+  }, [filterExamType, openFilter]);
 
   const examTypeData = examTypeResult?.data?.map((examType) => {
     return { type: examType.examType, id: examType.examTypeId };
@@ -148,13 +148,13 @@ function FilterCompo({
   const [groupTrigger, groupResult] = useLazyGetAllGroupsForDropDownQuery();
 
   useEffect(() => {
-    if (filterGroup) {
+    if (filterGroup && openFilter) {
       const fetch = async () => {
         await groupTrigger();
       };
       fetch();
     }
-  }, []);
+  }, [filterGroup, openFilter]);
 
   const groupDropDown = groupResult?.data?.map((item) => {
     return { id: item.groupId, type: item.groupName };
@@ -165,13 +165,13 @@ function FilterCompo({
     useLazyGetAllSubjectsForDropDownQuery();
 
   useEffect(() => {
-    if (filterSubject) {
+    if (filterSubject && openFilter) {
       const fetch = async () => {
         await subjectTrigger();
       };
       fetch();
     }
-  }, []);
+  }, [filterSubject, openFilter]);
 
   const prpareSubjectDropDown = subjectResult?.data?.map((item) => {
     return { id: item.subjectId, type: item.subjectName };
@@ -184,13 +184,13 @@ function FilterCompo({
     useLazyGetAllChapterForDropDownQuery();
 
   useEffect(() => {
-    if (filterChapter) {
+    if (filterChapter && openFilter) {
       const fetch = async () => {
         await cahpterTrigger();
       };
       fetch();
     }
-  }, []);
+  }, [filterChapter, openFilter]);
 
   const prparechapterDropDown = chapterResult?.data?.map((item) => {
     return { id: item.chapterId, type: item.chapterName };
