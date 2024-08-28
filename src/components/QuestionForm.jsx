@@ -54,7 +54,7 @@ function QuestionForm({ data, isLoading, isFetching }) {
       formData.append("signature", signature);
       formData.append("timestamp", timestamp);
       formData.append("api_key", api_key);
-      // formData.append("folder", "question-images");
+      formData.append("folder", "question-images");
 
       // Send the request
       const response = await fetch(postImageCloudinaryApi, {
