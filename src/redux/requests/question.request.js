@@ -14,6 +14,13 @@ const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: ["single-question"],
     }),
 
+    getCloudinarySign: builder.mutation({
+      query: () => ({
+        url: `/questions/generateSignature`,
+        method: "POST",
+      }),
+    }),
+
     addQuestion: builder.mutation({
       query: (values) => ({
         url: `/questions`,
@@ -45,6 +52,7 @@ const extendedApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetAllQuestionQuery,
   useGetSingleQuestionQuery,
+  useGetCloudinarySignMutation,
   useAddQuestionMutation,
   useEditQuestionMutation,
   useDeleteQuestionMutation,

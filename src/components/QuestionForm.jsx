@@ -1,5 +1,5 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 
 import { useLazyGetAllSubjectsForDropDownQuery } from "../redux/requests/subjectsRequest";
@@ -8,10 +8,87 @@ import { useLazyGetAllChapterForDropDownQuery } from "../redux/requests/chapterR
 import {
   useAddQuestionMutation,
   useEditQuestionMutation,
+  useGetCloudinarySignMutation,
 } from "../redux/requests/question.request";
+import { MdImage, MdOutlineFileUpload, MdDeleteOutline } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
 
 function QuestionForm({ data, isLoading, isFetching }) {
+  const [imageShortUrl, setImageShortUrl] = useState("");
+  const [imageFullUrl, setImageFullUrl] = useState("");
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  // IMAGE UPLOAD
+  const [uploadSiganature, { isLoading: uploadSiganatureLoading }] =
+    useGetCloudinarySignMutation();
+
+  const handleImageUpload = async (event) => {
+    try {
+      setUploadLoading(true);
+      // Get the file from the input
+      const file = event.target.files[0];
+      if (!file) {
+        throw new Error("No file selected.");
+      }
+
+      const MAX_FILE_SIZE = 2 * 1024 * 1024; // 5 MB in bytes
+
+      if (file.size > MAX_FILE_SIZE) {
+        throw new Error(
+          `File size exceeds the ${MAX_FILE_SIZE / (1024 * 1024)} MB limit.`
+        );
+      }
+      // Fetch the Cloudinary signature
+      const cloudinarySignature = await uploadSiganature().unwrap();
+      const { signature, timestamp } = cloudinarySignature;
+      const api_key = "274612461493119"; // This should be secured and not hardcoded in production.
+
+      // Cloudinary upload URL
+      const cloudName = "dkhns2yiy";
+      const resourceType = "image";
+      const postImageCloudinaryApi = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+      // Prepare the FormData object
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("signature", signature);
+      formData.append("timestamp", timestamp);
+      formData.append("api_key", api_key);
+      formData.append("folder", "question-images");
+
+      // Send the request
+      const response = await fetch(postImageCloudinaryApi, {
+        method: "POST",
+        body: formData,
+      });
+
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${response.statusText}`);
+      }
+
+      // Parse and handle the response
+      const data = await response.json();
+
+      setImageFullUrl(data?.secure_url);
+      setImageShortUrl(data?.public_id);
+      setUploadLoading(false);
+
+      // Optionally handle the uploaded data
+      // e.g., update state or show a success message
+    } catch (error) {
+      // Display error message to the user
+      console.error("Error during file upload:", error.message);
+      setUploadLoading(false);
+      toast.error(error.message);
+    }
+  };
+
+  const handleDeleteInage = () => {
+    setImageFullUrl("");
+    setUploadLoading("");
+  };
+
   // EXAM TYPE DROP DOWN
   const [trigger, result] = useLazyGetExamTypeForDropDownQuery();
   useEffect(() => {
@@ -66,6 +143,9 @@ function QuestionForm({ data, isLoading, isFetching }) {
       formikRef?.current?.setFieldValue("options", data?.options);
       formikRef?.current?.setFieldValue("answerId", data?.answerId);
       formikRef?.current?.setFieldValue("explanation", data?.explanation);
+      // PRE-LOAD-IMAGE
+      setImageFullUrl(data?.imageFullUrl);
+      setImageShortUrl(data?.imageShortUrl);
     }
   }, [formikRef, data, isLoading, isFetching]);
 
@@ -161,11 +241,10 @@ function QuestionForm({ data, isLoading, isFetching }) {
           explanation: yup.string(),
         })}
         onSubmit={async (values) => {
-          console.log(values);
           if (data) {
             const editData = {
               id: data._id,
-              values: { ...values },
+              values: { ...values, imageFullUrl, imageShortUrl },
             };
             await editQuestion(editData).then((res) => {
               if (res.error) {
@@ -176,12 +255,12 @@ function QuestionForm({ data, isLoading, isFetching }) {
               }
             });
           } else {
-            const addData = { ...values };
+            const addData = { ...values, imageFullUrl, imageShortUrl };
             await addQuestion(addData).then((res) => {
               if (res.error) {
                 toast.error(res.error.data.message);
               } else {
-                toast.success("Edited question");
+                toast.success("Added question");
               }
             });
           }
@@ -192,23 +271,72 @@ function QuestionForm({ data, isLoading, isFetching }) {
             (item) => item?.option
           );
           return (
-            <Form className="flex flex-col gap-3 w-2/3">
+            <Form className="flex flex-col gap-3 w-4/5 mb-8">
               <div className="flex flex-col">
                 <label htmlFor="question" className="font-semibold ml-1">
                   Question *
                 </label>
-                <Field
+                <textarea
+                  {...formik.getFieldProps("question")}
                   type="string"
                   id="question"
                   name="question"
                   className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
-                  placeholder="Student name"
+                  placeholder="Question"
                 />
                 <ErrorMessage name="question">
                   {(errorMessage) => (
                     <p className="text-red-500 mr-1">{errorMessage}</p>
                   )}
                 </ErrorMessage>
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="file-input" className="font-semibold ml-1">
+                  <div className="flex justify-start items-center gap-1">
+                    <MdImage size={20} />
+                    <p>Image</p>
+                  </div>
+                </label>
+                <input
+                  id="file-input"
+                  type="file"
+                  className="hidden"
+                  accept="image/png, image/jpeg"
+                  disabled={uploadLoading}
+                  onChange={(event) => handleImageUpload(event)}
+                />
+                <label
+                  htmlFor="file-input"
+                  className=" border rpunded-xl border-appGray py-3 rounded-xl cursor-pointer px-2 hover:bg-appGray/20 duration-200"
+                >
+                  {uploadLoading ? (
+                    <div className="flex justify-start items-center gap-1 text-appGray">
+                      <p>Loading...</p>
+                    </div>
+                  ) : (
+                    <div className="flex justify-start items-center gap-1 text-appGray">
+                      <MdOutlineFileUpload size={20} />
+                      <p>Select Image</p>
+                    </div>
+                  )}
+                </label>
+
+                {imageFullUrl && (
+                  <div className="relative mt-3 w-[55%] ">
+                    <div
+                      className="bg-appGray p-1 absolute top-3 right-3 rounded-full cursor-pointer text-white hover:scale-105 hover:bg-red-500 duration-200"
+                      onClick={() => handleDeleteInage()}
+                    >
+                      <MdDeleteOutline size={25} />
+                    </div>
+                    <img
+                      src={imageFullUrl}
+                      alt="question-image"
+                      className=" aspect-video object-cover  rounded-2xl border border-appLightGray"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex w-full gap-4">
@@ -220,7 +348,8 @@ function QuestionForm({ data, isLoading, isFetching }) {
                     type="string"
                     id="option1"
                     name="options[0].option"
-                    className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen focus:ring-1 focus:ring-appGreen"
+                    className="border-appGray border px-2 py-3 rounded-xl w-full placeholder-slate-400  focus:outline-none focus:border-appGreen
+                     focus:ring-1 focus:ring-appGreen"
                     placeholder="Option 1"
                   />
                   <ErrorMessage name="options[0].option">

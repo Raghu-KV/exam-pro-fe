@@ -89,8 +89,21 @@ function ViewChapter() {
         <div className="px-4 pb-6">
           {data?.docs?.map((item) => (
             <div className="px-4 border border-appDarkBlue rounded-lg mb-3 mx-4 py-2">
-              <p className="p-1 font-semibold">{item.question}</p>
-              <p className="px-2 font-sm">
+              <p className="p-1">
+                <pre className="font-inter whitespace-pre-wrap break-words">
+                  {item.question}
+                </pre>
+              </p>
+              {item.imageFullUrl && (
+                <div className=" mt-3 w-[25%] aspect-video">
+                  <img
+                    src={item.imageFullUrl}
+                    alt="question-image"
+                    className="aspect-video object-cover  rounded-2xl border border-appLightGray"
+                  />
+                </div>
+              )}
+              <p className="px-2 font-sm mt-3 border-t border-appGray/50">
                 {item.options[item.answerId].option}
               </p>
             </div>

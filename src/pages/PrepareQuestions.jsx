@@ -16,7 +16,7 @@ import LoadingCompo from "../components/LoadingCompo";
 function PrepareQuestions() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [openQuestion, setOpenQuestion] = useState(false);
+  const [openQuestion, setOpenQuestion] = useState(true);
   const [changed, setChanged] = useState(false);
 
   const [updateQuestions, { isLoading: updateQuestionsIsLoading }] =

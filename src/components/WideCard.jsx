@@ -13,8 +13,37 @@ function WideCard({
 
   return (
     <div className="w-full px-1 py-2 border border-appDarkBlue rounded-xl">
-      <div className="flex items-center justify-between">
-        <p className="px-2 font-semibold">{data.question}</p>
+      <div className={`flex items-start justify-between gap-3`}>
+        <div className="flex flex-col">
+          {openQuestions ? (
+            <p className="px-2">
+              <pre className="font-inter whitespace-pre-wrap break-words text-justify">
+                {data.question}
+              </pre>
+            </p>
+          ) : (
+            <p className="px-2">
+              <pre className="font-inter whitespace-pre-wrap break-words text-justify">
+                {data.question.length > 100
+                  ? data.question.slice(0, 100) + "..."
+                  : data.question}
+              </pre>
+            </p>
+          )}
+
+          {/* IMAGE */}
+
+          {data?.imageFullUrl && openQuestions && (
+            <div className=" m-3 w-[50%] aspect-video">
+              <img
+                src={data?.imageFullUrl}
+                alt="question-image"
+                className="aspect-video object-cover  rounded-2xl border border-appLightGray"
+              />
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center gap-3">
           <div>
             <button

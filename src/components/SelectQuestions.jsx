@@ -7,6 +7,7 @@ import WideCard from "./WideCard";
 import { MdArrowBackIos, MdArrowForwardIos, MdAdd } from "react-icons/md";
 import { addQuestions } from "../redux/reducers/prepareQuestion-reducer";
 import { useDispatch, useSelector } from "react-redux";
+import LoadingCompo from "./LoadingCompo";
 
 function SelectQuestions({ setChanged }) {
   const [question, setQuestion] = useState("");
@@ -32,7 +33,7 @@ function SelectQuestions({ setChanged }) {
   }, [currentPage]);
 
   // API CALL
-  const [trigger, { isLoading, isError, data, error }] =
+  const [trigger, { isLoading, isError, data, error, isFetching }] =
     useLazyGetAllQuestionQuery();
 
   useEffect(() => {
@@ -59,9 +60,13 @@ function SelectQuestions({ setChanged }) {
   // CHECKING WHEATHER THE QUESTION IS PRESENT IN REDUX OR NOT ++++++
   const allQuestions = useSelector((state) => state.prepareQuestions.value);
   const onlyIds = allQuestions.map((item) => item.questionId);
+  if (isLoading) {
+    return <LoadingCompo />;
+  }
 
   return (
     <div className="w-full">
+      {isFetching && <LoadingCompo />}
       <FilterCompo
         setSearchItem={setQuestion}
         setAllFilter={setAllFilter}

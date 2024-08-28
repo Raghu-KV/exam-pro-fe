@@ -15,10 +15,23 @@ function ViewQuestion() {
     <div className="w-full">
       <PageHeaderComp heading={"View Question"} />
 
-      <div className="px-5 pt-8">
+      <div className="px-5 pt-8 mb-8">
         <div>
-          <p className="mb-2">Question:</p>
-          <p className="font-bold text-3xl">{data?.question}</p>
+          <p className="font-bold text-2xl">Question:</p>
+          <p className=" text-lg font-inter">
+            <pre className="font-inter whitespace-pre-wrap break-words text-justify">
+              {data?.question}
+            </pre>
+          </p>
+          {data?.imageFullUrl && (
+            <div className=" mt-3 w-[40%] aspect-video">
+              <img
+                src={data?.imageFullUrl}
+                alt="question-image"
+                className="aspect-video object-cover  rounded-2xl border border-appLightGray"
+              />
+            </div>
+          )}
         </div>
         <div>
           {data?.options.map((item) => (
@@ -48,7 +61,9 @@ function ViewQuestion() {
           <div className="mt-5">
             <p className="font-bold text-2xl">Explanation:</p>
             <p className="mb-2 pb-2">
-              <pre className="font-inter">{data?.explanation}</pre>
+              <pre className="font-inter whitespace-pre-wrap break-words">
+                {data?.explanation}
+              </pre>
             </p>
           </div>
         )}
