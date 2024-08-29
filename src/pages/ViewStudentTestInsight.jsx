@@ -74,7 +74,7 @@ function ViewStudentTestInsight() {
   return (
     <div className="w-full px-4">
       {isFetching && <LoadingCompo />}
-      <PageHeaderComp heading={"View Question"} />
+      <PageHeaderComp heading={"View Test Insignt"} />
       <div>
         <h1 className="font-bold text-center mt-3 text-3xl">
           {data?.docs?.testInfo?.testName}

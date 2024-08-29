@@ -56,10 +56,20 @@ function ViewQuestionComp() {
   const prepareData = data?.docs.map((item) => {
     return {
       _id: item?._id,
-      question: item?.question,
-      answer: item?.options[item.answerId]?.option,
+      question:
+        item?.question.length > 100
+          ? item?.question.slice(0, 100) + "..."
+          : item?.question,
+
+      answer:
+        item?.options[item.answerId]?.option.length > 100
+          ? item?.options[item.answerId]?.option.slice(0, 100) + "..."
+          : item?.options[item.answerId]?.option,
+
       chapter: item?.chapter?.chapterName,
       subject: item?.subject?.subjectName,
+      examType: item?.examType?.examType,
+      createdAt: item?.createdAt,
     };
   });
 
@@ -118,6 +128,7 @@ function ViewQuestionComp() {
         isLoading={isLoading}
         isError={isError}
         isActions={false}
+        isTestTypeQuestionView={true}
       />
     </div>
   );

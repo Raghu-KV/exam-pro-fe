@@ -24,6 +24,7 @@ function TableCompo({
   isFetching,
   isActions = true,
   isInsightActions = false,
+  isTestTypeQuestionView = false,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -78,11 +79,12 @@ function TableCompo({
               </th>
             )}
 
-            {isInsightActions && (
-              <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
-                Actions
-              </th>
-            )}
+            {isInsightActions ||
+              (isTestTypeQuestionView && (
+                <th className="table-cell text-left p-3 border-b border-appLightGray border-r w-3">
+                  Actions
+                </th>
+              ))}
           </tr>
         </thead>
 
@@ -137,6 +139,24 @@ function TableCompo({
                   </div>
                 </td>
               )}
+
+              {/* ONLY FOR TEST-TYPE QUESTION VIEWW */}
+              {isTestTypeQuestionView && (
+                <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">
+                  <div className="flex items-center justify-center">
+                    <p
+                      className="cursor-pointer text-appGreen px-1 py-1 hover:bg-appGreen/20 duration-150 rounded-xl"
+                      onClick={() =>
+                        navigate(`/auth/questions/view/${item._id}`)
+                      }
+                    >
+                      <MdInfo size={25} />
+                    </p>
+                  </div>
+                </td>
+              )}
+
+              {/* ONLY FOR STUDENT INSIGHT */}
 
               {isInsightActions && (
                 <td className="table-cell px-3 py-1 border-b border-appDarkBlue border-r">

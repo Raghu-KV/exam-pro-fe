@@ -21,7 +21,21 @@ function AnswerCompo({ answer }) {
       </div>
 
       <div className="text-sm lg:text-base">
-        <p className="font-semibold">{answer.question?.question}</p>
+        <p className=" py-2">
+          <pre className="font-inter whitespace-pre-wrap break-words text-justify">
+            {answer.question?.question}
+          </pre>
+        </p>
+
+        {answer.question?.imageFullUrl && (
+          <div className=" my-3 w-full lg:w-[40%] aspect-video">
+            <img
+              src={answer.question?.imageFullUrl}
+              alt="question-image"
+              className="aspect-video object-cover  rounded-2xl border border-appLightGray"
+            />
+          </div>
+        )}
 
         {answer?.question?.options?.map((option) => {
           return (
