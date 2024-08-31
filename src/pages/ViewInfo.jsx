@@ -24,8 +24,10 @@ function ViewInfo() {
 
       <div className="px-4 mt-5">
         <h2 className="font-semibold text-appGray text-xl">Description</h2>
-        <p className="font-semibold">
-          <pre className="font-inter">{data?.description}</pre>
+        <p className=" text-lg font-inter">
+          <pre className="font-inter whitespace-pre-wrap break-words text-justify">
+            {data?.description}
+          </pre>
         </p>
       </div>
 
